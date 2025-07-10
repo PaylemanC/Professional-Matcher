@@ -1,8 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
+from technologies.models import Technology
 
 class ProfessionalProfile(models.Model):
+    fk_user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     area = models.CharField(max_length=100, blank=True, null=True)
+    technologies = models.ManyToManyField(Technology, blank=True, related_name='profiles')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
