@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 def index(request):
-    """
-    Render the landing page.
-    """
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     return render(request, 'index.html')
+
+def dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('index') 
+    return render(request, 'dashboard.html')
