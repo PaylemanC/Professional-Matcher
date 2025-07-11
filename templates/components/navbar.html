@@ -1,0 +1,15 @@
+<nav>
+    <ul>
+        {% if user.is_authenticated %}
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Cerrar sesión</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+            <li><a href="{% url 'register' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+</nav>

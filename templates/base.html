@@ -7,7 +7,8 @@
     <title>{% block title %} Professional Matcher {% endblock %}</title>
 </head>
 <body>
-     <main>
+    {% include 'components/navbar.html' %}
+    <main>
         {% block content %}{% endblock content %}
     </main>
 </body>
