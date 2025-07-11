@@ -2,5 +2,15 @@
 {% load static %} 
 
 {% block content %}
-    <h2>Bienvenido, {{ user.username }}!
+    <h2>Bienvenido, {{ user.username }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Analizar</button>
+    </form>
+
+    {% if result %}
+        {% include "report.html" with result=result %}
+    {% endif %}
 {% endblock content %}
