@@ -17,4 +17,14 @@ def clean_job_offer(job_offer):
 
     return job_offer
 
+def lemmatize_job_offer(job_offer: str) -> list:
+    job_offer = clean_job_offer(job_offer)
+
+    job_offer_doc = nlp(job_offer)
+    lemmatized_words = [word.lemma_ for word in job_offer_doc]
+
+    return lemmatized_words
+
 print(clean_job_offer("Software Engineer - Python & Django - Oferta de Trabajo increíble...!"))
+print(lemmatize_job_offer("Software Engineer - Python & Django - Oferta de Trabajo increíble...!"))
+print(lemmatize_job_offer("Desarrollo soluciones con Python, trabajé con Ruby y tengo experiencia trabajando en equipos ágiles."))
