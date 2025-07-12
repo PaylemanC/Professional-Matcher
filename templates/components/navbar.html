@@ -4,6 +4,8 @@
             <li>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
+                    <a href="{% url 'dashboard' %}">Inicio</a>
+                    <a href="{% url 'profile' %}">Perfil</a>
                     <button type="submit">Cerrar sesión</button>
                 </form>
             </li>
