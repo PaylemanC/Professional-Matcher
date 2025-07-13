@@ -12,7 +12,7 @@ class ProfessionalProfile(models.Model):
 
 class CareerItem(models.Model):
     fk_profile = models.ForeignKey(ProfessionalProfile, related_name='career_items', on_delete=models.CASCADE)
-    item_type = models.CharField(choices=[('education', 'Education'), ('experience', 'Experience')])
+    item_type = models.CharField(max_length=10, choices=[('education', 'Education'), ('experience', 'Experience')])
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     institution = models.CharField(max_length=200, blank=True, null=True, default="Independent")
