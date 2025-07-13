@@ -12,21 +12,36 @@
 
 <section>
     <h3>Perfil Profesional</h3>
-    {% if profile %}
-        <p>Biografía: {{ profile.bio|default:"No especificada" }}</p>
-        <p>Área: {{ profile.area|default:"No especificada" }}</p>
-        
+    {% if profile %}    
+        <p>Biografía:</p>
+        {% if profile.bio %}
+            <p>{{ profile.bio }}</p>
+        {% else %}
+            <p>No tienes una biografía todavía.</p>
+        {% endif %}
+
+        <p>Área:</p> 
+         {% if profile.area %}
+            <p>{{ profile.area }}</p>
+        {% else %}
+            <p>No tienes un área definida todavía.</p>
+        {% endif %}
+
+        <p>Tecnologías:</p>
         {% if profile.technologies.exists %}
-            <p>Tecnologías:
+            <p>
                 {% for tech in profile.technologies.all %}
-                {{ tech.name }}
+                    {{ tech.name }}
                     {% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
+        {% else %}
+            <p>No tienes ninguna tecnología todavía.</p>
         {% endif %}
+
         <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
     {% else %}
-        <p>No hay información de perfil profesional disponible aún.</p>
+        <p>Aún no has cargado tu perfil profesional.</p>
         <p><a href="#">Crear Perfil Profesional</a></p>
     {% endif %}
 </section>
