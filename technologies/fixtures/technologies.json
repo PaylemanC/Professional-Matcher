@@ -1,0 +1,198 @@
+[
+{
+  "model": "technologies.technology",
+  "pk": 3,
+  "fields": {
+    "name": "python"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 4,
+  "fields": {
+    "name": "django"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 5,
+  "fields": {
+    "name": "javascript"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 6,
+  "fields": {
+    "name": "java"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 7,
+  "fields": {
+    "name": "react"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 8,
+  "fields": {
+    "name": "angular"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 9,
+  "fields": {
+    "name": "vue"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 10,
+  "fields": {
+    "name": "node"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 11,
+  "fields": {
+    "name": "mysql"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 12,
+  "fields": {
+    "name": "sql"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 13,
+  "fields": {
+    "name": "mongodb"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 14,
+  "fields": {
+    "name": "expressjs"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 15,
+  "fields": {
+    "name": "sass"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 16,
+  "fields": {
+    "name": "typescript"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 17,
+  "fields": {
+    "name": "html"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 18,
+  "fields": {
+    "name": "css"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 19,
+  "fields": {
+    "name": "numpy"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 20,
+  "fields": {
+    "name": "pandas"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 21,
+  "fields": {
+    "name": "c++"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 22,
+  "fields": {
+    "name": "c#"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 23,
+  "fields": {
+    "name": "dart"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 24,
+  "fields": {
+    "name": "flutter"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 25,
+  "fields": {
+    "name": "swift"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 26,
+  "fields": {
+    "name": "docker"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 27,
+  "fields": {
+    "name": "git"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 28,
+  "fields": {
+    "name": "php"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 29,
+  "fields": {
+    "name": "ruby"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 30,
+  "fields": {
+    "name": "ruby on rails"
+  }
+}
+]
