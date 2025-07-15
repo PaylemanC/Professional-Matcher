@@ -40,9 +40,10 @@
         {% endif %}
 
         <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
+        <a href="{% url 'profile_update' %}">Editar perfil profesional</a>
     {% else %}
         <p>Aún no has cargado tu perfil profesional.</p>
-        <p><a href="#">Crear Perfil Profesional</a></p>
+        <a href="{% url 'profile_create' %}">Crea tu perfil profesional</a>
     {% endif %}
 </section>
 

@@ -1,6 +1,9 @@
 from django.urls import path
-from profiles.views import profile_detail
+from profiles.views import profile_detail, ProfileCreateView, ProfileUpdateView
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('profile', profile_detail, name='profile'),
+    path('', login_required(profile_detail), name='profile'),
+    path('create', login_required(ProfileCreateView.as_view()), name='profile_create'),
+    path('edit', login_required(ProfileUpdateView.as_view()), name='profile_update'),
 ]

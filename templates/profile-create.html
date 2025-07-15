@@ -1,0 +1,12 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block content %}
+    <h2>Crea tu perfil profesional</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear perfil</button>
+    </form>
+    <a href="{% url 'dashboard' %}">Regresar</a>
+{% endblock %}
