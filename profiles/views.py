@@ -79,3 +79,24 @@ class CareerItemUpdateView(UpdateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+
+class CareerItemDeleteView(DeleteView):
+    model = CareerItem
+    template_name = 'career-item-delete.html'
+    context_object_name = 'career_item'
+    success_url = '/profile'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.item_type = kwargs.get('item_type')
+        if self.item_type not in ['education', 'experience']:
+            return redirect('profile')  
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return CareerItem.objects.filter(fk_profile=self.request.user.profile, item_type=self.item_type)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['item_type'] = self.item_type
+        return context

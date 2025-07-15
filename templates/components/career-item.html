@@ -14,5 +14,17 @@
             {% endif %}
         </p>
     </div>
-    <a href="{% url 'career_item_edit' item.item_type item.pk %}">Editar</a>
+    <div>
+        <a href="{% url 'career_item_edit' item.item_type item.pk %}">Editar</a>
+
+        <a href="?delete={{ item.pk }}&type={{ item.item_type }}">Eliminar</a>
+        {% if request.GET.delete|default:'' == item.pk|stringformat:"s" %}
+        <form method="post" action="{% url 'career_item_delete' item.item_type item.pk %}">
+            {% csrf_token %}
+            <p>¿Estás seguro de eliminar {{ item.title }}?</p>
+            <button type="submit">Sí, borrar</button>
+            <a href="{% url 'profile' %}">Cancelar</a>
+        </form>
+        {% endif %}
+    </div>
 {% endif %}
