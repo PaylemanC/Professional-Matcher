@@ -1,0 +1,17 @@
+{% if item.item_type == type %}
+    <div class="career-item-{{type|lower}}">
+        <p>{{ item.title }} en {{ item.institution }}</p>
+        {% if item.description %}
+            <p>{{ item.description }}</p>
+        {% endif %}
+        <p>
+            {{ item.start_date|date:"M Y" }} 
+            -
+            {% if item.get_end_date_display %}
+                {{ item.get_end_date_display }}
+            {% else %}
+                Actualidad
+            {% endif %}
+        </p>
+    </div>
+{% endif %}

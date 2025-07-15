@@ -39,6 +39,22 @@
             <p>No tienes ninguna tecnología todavía.</p>
         {% endif %}
 
+        <h3>Educación</h3>
+        <a href="#">Añadir educación</a>
+        {% if profile.career_items.exists %}
+            {% for item in profile.career_items.all %}
+                {% include "components/career-item.html" with item=item type='education' %}
+            {% endfor %}
+        {% endif %}
+
+        <h3>Experiencia</h3>
+        <a href="#">Añadir experiencia laboral</a>
+        {% if profile.career_items.exists %}
+            {% for item in profile.career_items.all %}
+                {% include "components/career-item.html" with item=item type='experience' %}
+            {% endfor %}
+        {% endif %}
+
         <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
         <a href="{% url 'profile_update' %}">Editar perfil profesional</a>
     {% else %}
