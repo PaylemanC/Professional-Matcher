@@ -40,7 +40,7 @@
         {% endif %}
 
         <h3>Educación</h3>
-        <a href="#">Añadir educación</a>
+        <a href="{% url 'career_item_create' 'education' %}">Añadir educación</a>
         {% if profile.career_items.exists %}
             {% for item in profile.career_items.all %}
                 {% include "components/career-item.html" with item=item type='education' %}
@@ -48,7 +48,7 @@
         {% endif %}
 
         <h3>Experiencia</h3>
-        <a href="#">Añadir experiencia laboral</a>
+        <a href="{% url 'career_item_create' 'experience' %}">Añadir experiencia laboral</a>
         {% if profile.career_items.exists %}
             {% for item in profile.career_items.all %}
                 {% include "components/career-item.html" with item=item type='experience' %}

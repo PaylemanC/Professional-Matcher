@@ -24,3 +24,35 @@ class ProfessionalProfileForm(forms.ModelForm):
             'area': 'Profesión',
             'technologies': 'Selecciona las tecnologías que dominas',
         } 
+
+class CareerItemForm(forms.ModelForm):
+    class Meta:
+        model = CareerItem
+        fields = ['title', 'description', 'institution', 'start_date', 'end_date']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': ''
+            }),
+            'institution': forms.TextInput(attrs={
+                'class': ''
+            }),
+            'start_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': ''
+            }),
+            'end_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': ''
+            }),
+            'description': forms.Textarea(attrs={
+                'rows': 4,
+                'class': ''
+            }),
+        }
+        labels = {
+            'title': 'Título',
+            'description': 'Descripción de tus responsabilidades y logros',
+            'institution': 'Nombre de la empresa o institución',
+            'start_date': 'Fecha de inicio',
+            'end_date': 'Fecha de finalización (dejar en blanco si es actual)',
+        }
