@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from profiles.forms import ProfessionalProfileForm, CareerItemForm
-from profiles.models import ProfessionalProfile
+from profiles.models import ProfessionalProfile, CareerItem
 from django.views.generic.edit import UpdateView, FormView, DeleteView
 
 @login_required
@@ -54,3 +54,28 @@ class CareerItemCreateView(FormView):
         context = super().get_context_data(**kwargs)
         context['item_type'] = self.item_type
         return context
+
+
+class CareerItemUpdateView(UpdateView):
+    model = CareerItem
+    form_class = CareerItemForm
+    template_name = 'career-item-edit.html'
+    context_object_name = 'career_item'
+    success_url = '/profile'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.item_type = kwargs.get('item_type')
+        if self.item_type not in ['education', 'experience']:
+            return redirect('profile')  
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return CareerItem.objects.filter(fk_profile=self.request.user.profile, item_type=self.item_type)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['item_type'] = self.item_type
+        return context
+
+    def form_valid(self, form):
+        return super().form_valid(form)
