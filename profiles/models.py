@@ -10,12 +10,15 @@ class ProfessionalProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.fk_user.username}'s Profile"
+
 class CareerItem(models.Model):
     fk_profile = models.ForeignKey(ProfessionalProfile, related_name='career_items', on_delete=models.CASCADE)
     item_type = models.CharField(max_length=10, choices=[('education', 'Education'), ('experience', 'Experience')])
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    institution = models.CharField(max_length=200, blank=True, null=True, default="Independent")
+    institution = models.CharField(max_length=200, blank=True, null=True, default="Independiente")
     description = models.TextField(blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
@@ -23,7 +26,7 @@ class CareerItem(models.Model):
     def get_end_date_display(self):
         if self.end_date:
             return self.end_date.strftime("%B %Y")
-        return "Present"
+        return "Actualidad"
 
     def __str__(self):
-        return f"{self.title} at {self.institution} ({self.start_date} - {self.end_date})"
+        return f"({self.fk_profile.fk_user}) {self.title} at {self.institution} ({self.start_date} - {self.end_date})"
