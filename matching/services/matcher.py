@@ -82,11 +82,20 @@ class MatcherService:
         return self.technology_match_results    
 
     def highlight_keywords(self):
-        ''' Extracts keywords from the job offer based on user profile. Classifies them as 'matched' and 'missing' '''
+        '''
+        Extracts and matches non-technical keywords from job offer against user profile (user.profile.bio and career_items descriptions/titles).
+        - Returns matched and missing keywords with their sources.
+        - Focus on: soft skills, methodologies, certifications, etc. 
+        '''
         pass    
 
     def related_career_items(self):
-        ''' Search related career items based on the job offer '''
+        ''' 
+        Ranks user's career items by relevance to the job offer.
+        - Uses semantic similarity to score complete career experiences against job requirements.
+        - Returns ranked career items with relevance scores and matched concepts.
+        - Focus on: contextual experience matching, complete work history
+        '''
         pass
 
     def suggest_missing_elements(self):
