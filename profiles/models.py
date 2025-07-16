@@ -19,7 +19,6 @@ class CareerItem(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     institution = models.CharField(max_length=200, blank=True, null=True, default="Independiente")
-    description = models.TextField(blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
