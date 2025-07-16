@@ -1,5 +1,11 @@
 from profiles.models import ProfessionalProfile, CareerItem
+from technologies.models import Technology
 from django import forms
+from django_select2 import forms as s2forms
+
+class TechnologySelectWidget(s2forms.ModelSelect2MultipleWidget):
+    model = Technology
+    search_fields = ['name__istartswith']
 
 class ProfessionalProfileForm(forms.ModelForm):
     class Meta:
@@ -15,9 +21,7 @@ class ProfessionalProfileForm(forms.ModelForm):
                 'placeholder': 'Cuéntanos de ti...',
                 'class': ''
             }),
-            'technologies': forms.CheckboxSelectMultiple(attrs={
-                'class': ''
-            }),
+            'technologies': TechnologySelectWidget,
         }
         labels = {
             'bio': 'Describe tu experiencia profesional y objetivos',

@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Professional Matcher {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% block styles %}{% endblock %}
+    {% block styles %}{% endblock styles %}
 </head>
 <body>
     {% include 'components/navbar.html' %}
     <main>
         {% block content %}{% endblock content %}
     </main>
+
+    {% block js %}{% endblock js %}
 </body>
 </html>

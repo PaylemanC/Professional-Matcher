@@ -1,5 +1,14 @@
 {% extends "base.html" %} 
 {% load static %} 
+{% block styles %} 
+    {{ form.media.css }} 
+    <style>
+        input, select, textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+    </style>
+{% endblock styles %}
 
 {% block content %}
     <h2>Crea tu perfil profesional</h2>
@@ -10,3 +19,8 @@
     </form>
     <a href="{% url 'dashboard' %}">Regresar</a>
 {% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{ form.media.js }}
+{% endblock js %}

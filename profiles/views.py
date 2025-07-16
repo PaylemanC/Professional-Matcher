@@ -13,6 +13,7 @@ def profile_detail(request):
 
 
 class ProfileCreateView(FormView):
+    model = ProfessionalProfile
     form_class = ProfessionalProfileForm
     template_name = 'profile-create.html'
     success_url = '/profile'
