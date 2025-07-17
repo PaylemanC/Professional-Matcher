@@ -1,17 +1,20 @@
 from matching.utils import clean_text, lemmatize_text
 from sentence_transformers import SentenceTransformer
+from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
+from profiles.utils import build_user_profile_text, find_keyword_in_profile
 
 class MatcherService:
     def __init__(self, user, job_description):
         self.user = user
         self.profile = user.profile
-        self.job_offer = clean_text(job_description)
+        self.job_offer = clean_text(job_description, r'[^a-z0-9\s]')
 
-        self.lemmatized_job_offer = lemmatize_text(job_description)
+        self.lemmatized_job_offer = lemmatize_text(job_description, r'[^a-z0-9\s]')
 
-        self.model = SentenceTransformer('all-mpnet-base-v2')
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')  # all-mpnet-base-v2
+        self.kw_model = KeyBERT(model=self.model)
 
     def match_technologies(self):
         ''' 
@@ -50,7 +53,7 @@ class MatcherService:
         
         similarity_matrix = cosine_similarity(user_embeddings, job_embeddings)
         
-        threshold = 0.8        
+        threshold = 0.75    
         match_details = []        
         matched_technologies = []
         matched_job_technologies = []         
@@ -88,7 +91,85 @@ class MatcherService:
         - Returns matched and missing keywords with their sources.
         - Focus on: soft skills, methodologies, certifications, etc. 
         '''
-        pass    
+        job_text = ' '.join(self.lemmatized_job_offer)
+        job_keywords_with_scores = self.kw_model.extract_keywords(
+            job_text, 
+            keyphrase_ngram_range=(1, 2),  
+            stop_words=None,  
+            top_n=10, 
+            use_maxsum=True,  
+            nr_candidates=20  
+        )        
+        job_keywords_list = [keyword[0] for keyword in job_keywords_with_scores]
+        
+        user_profile_text = build_user_profile_text(self.profile)
+        if not user_profile_text:
+            return {
+                'matched_keywords': [],
+                'missing_keywords': job_keywords_list,
+                'match_score': 0.0,
+                'details': []
+            }
+        
+        job_embeddings = self.model.encode(job_keywords_list)
+        
+        user_keywords = self.kw_model.extract_keywords(
+            user_profile_text,
+            keyphrase_ngram_range=(1, 2),
+            stop_words=None,  
+            top_n=12,  
+            use_maxsum=True,
+            nr_candidates=20  
+        )        
+
+        user_keywords_terms = [keyword[0] for keyword in user_keywords]
+        if not user_keywords_terms:
+            return {
+                'matched_keywords': [],
+                'missing_keywords': job_keywords_list,
+                'match_score': 0.0,
+                'details': []
+            }
+        
+        user_embeddings = self.model.encode(user_keywords_terms)
+        
+        similarity_matrix = cosine_similarity(job_embeddings, user_embeddings)
+
+        threshold = 0.70           
+        matched_keywords = []
+        missing_keywords = []
+        match_details = []        
+        for i, job_keyword in enumerate(job_keywords_list):
+            best_match_idx = similarity_matrix[i].argmax()
+            best_similarity = similarity_matrix[i][best_match_idx]
+            
+            if best_similarity >= threshold:
+                matched_user_keyword = user_keywords_terms[best_match_idx]
+                matched_keywords.append(job_keyword)
+
+                sources = find_keyword_in_profile(matched_user_keyword, self.profile)
+                primary_source = sources[0] if sources else 'unknown'
+                
+                match_details.append({
+                    'job_keyword': job_keyword,
+                    'user_keyword': matched_user_keyword,
+                    'similarity_score': float(best_similarity),
+                    'source': primary_source,
+                    'all_sources': sources  
+                })
+            else:
+                missing_keywords.append(job_keyword)
+        
+        match_score = (len(matched_keywords) / len(job_keywords_list) * 100) if job_keywords_list else 0.0
+        
+        self.keyword_match_results = {
+            'matched_keywords': matched_keywords,
+            'missing_keywords': missing_keywords,
+            'match_score': match_score,
+            'details': match_details
+        }
+        
+        return self.keyword_match_results
 
     def related_career_items(self):
         ''' 
