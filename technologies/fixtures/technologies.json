@@ -194,5 +194,306 @@
   "fields": {
     "name": "ruby on rails"
   }
+},
+{
+  "model": "technologies.technology",
+  "pk": 31,
+  "fields": {
+    "name": "postgresql"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 32,
+  "fields": {
+    "name": "aws"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 33,
+  "fields": {
+    "name": "azure"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 34,
+  "fields": {
+    "name": "sklearn"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 35,
+  "fields": {
+    "name": "scipy"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 36,
+  "fields": {
+    "name": "keras"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 37,
+  "fields": {
+    "name": "tesseract"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 38,
+  "fields": {
+    "name": ".net"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 39,
+  "fields": {
+    "name": "spring boot"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 40,
+  "fields": {
+    "name": "amazon"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 41,
+  "fields": {
+    "name": "android"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 42,
+  "fields": {
+    "name": "arduino"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 43,
+  "fields": {
+    "name": "assembly"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 44,
+  "fields": {
+    "name": "bash/shell"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 45,
+  "fields": {
+    "name": "cassandra"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 46,
+  "fields": {
+    "name": "clojure"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 47,
+  "fields": {
+    "name": "cobol"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 48,
+  "fields": {
+    "name": "cordova"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 49,
+  "fields": {
+    "name": "boostrap"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 50,
+  "fields": {
+    "name": "drupal"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 51,
+  "fields": {
+    "name": "firebase"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 52,
+  "fields": {
+    "name": "go"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 53,
+  "fields": {
+    "name": "groovy"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 54,
+  "fields": {
+    "name": "heroku"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 55,
+  "fields": {
+    "name": "kotlin"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 56,
+  "fields": {
+    "name": "github actions"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 57,
+  "fields": {
+    "name": "linux"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 58,
+  "fields": {
+    "name": "mariadb"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 59,
+  "fields": {
+    "name": "perl"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 60,
+  "fields": {
+    "name": "oracle"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 61,
+  "fields": {
+    "name": "redis"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 62,
+  "fields": {
+    "name": "pytorch"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 63,
+  "fields": {
+    "name": "raspberry pi"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 64,
+  "fields": {
+    "name": "react native"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 65,
+  "fields": {
+    "name": "rust"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 66,
+  "fields": {
+    "name": "salesforce"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 67,
+  "fields": {
+    "name": "sql server"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 68,
+  "fields": {
+    "name": "sqlite"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 69,
+  "fields": {
+    "name": "tensorflow"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 70,
+  "fields": {
+    "name": "torch"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 71,
+  "fields": {
+    "name": "vb.net"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 72,
+  "fields": {
+    "name": "wordpress"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 73,
+  "fields": {
+    "name": "flask"
+  }
 }
 ]
