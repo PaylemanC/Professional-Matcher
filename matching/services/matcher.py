@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
-from profiles.utils import build_user_profile_text, find_keyword_in_profile
+from profiles.utils import build_user_profile_text, find_keyword_in_profile, lemmatize_profile_career_item
 
 class MatcherService:
     def __init__(self, user, job_description):
@@ -178,8 +178,81 @@ class MatcherService:
         - Returns ranked career items with relevance scores and matched concepts.
         - Focus on: contextual experience matching, complete work history
         '''
+        if not hasattr(self, 'keyword_match_results'):
+            self.highlight_keywords()
+        
+        job_text = ' '.join(self.lemmatized_job_offer)
+        
         experiences = self.profile.career_items.filter(item_type='experience')
         education = self.profile.career_items.filter(item_type='education')
+        all_career_items = list(experiences) + list(education)
+        
+        if not all_career_items:
+            return {
+                'ranked_career_items': [],
+                'relevance_scores': [],
+                'details': []
+            }
+        
+        career_item_texts = []
+        career_item_details = []        
+        for item in all_career_items:
+            lemmatized_item = lemmatize_profile_career_item(item)
+            
+            title_tokens = lemmatized_item['title'] if lemmatized_item['title'] else []
+            desc_tokens = lemmatized_item['description'] if lemmatized_item['description'] else []
+            
+            all_tokens = title_tokens + desc_tokens
+            item_text = ' '.join(all_tokens).strip()
+            
+            if item_text: 
+                career_item_texts.append(item_text)
+                career_item_details.append({
+                    'career_item': item,
+                    'text': item_text,
+                    'type': item.item_type,
+                    'title_tokens': title_tokens,
+                    'desc_tokens': desc_tokens
+                })
+        
+        if not career_item_texts:
+            return {
+                'ranked_career_items': [],
+                'relevance_scores': [],
+                'details': []
+            }
+        
+        job_embedding = self.model.encode([job_text])
+        career_embeddings = self.model.encode(career_item_texts)
+        
+        similarities = cosine_similarity(job_embedding, career_embeddings)[0]
+        
+        ranked_results = []
+        for i, (similarity_score, detail) in enumerate(zip(similarities, career_item_details)):
+            ranked_results.append({
+                'career_item': detail['career_item'],
+                'relevance_score': float(similarity_score),
+                'type': detail['type'],
+                'title': detail['career_item'].title,
+                'description': detail['career_item'].description,
+                'institution': detail['career_item'].institution,
+                'start_date': detail['career_item'].start_date,
+                'end_date': detail['career_item'].end_date,
+                'processed_text': detail['text'],
+                'title_tokens': detail['title_tokens'],
+                'desc_tokens': detail['desc_tokens']
+            })
+        ranked_results.sort(key=lambda x: x['relevance_score'], reverse=True)
+        
+        ranked_career_items = [result['career_item'] for result in ranked_results]
+        relevance_scores = [result['relevance_score'] for result in ranked_results]
+        self.career_items_results = {
+            'ranked_career_items': ranked_career_items,
+            'relevance_scores': relevance_scores,
+            'details': ranked_results
+        }
+        
+        return self.career_items_results
 
     def suggest_missing_elements(self):
         ''' Suggests action verbs, metrics, or phrases that appear in the job offer but are not present in the profile '''
