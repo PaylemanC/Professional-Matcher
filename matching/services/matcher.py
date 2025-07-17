@@ -1,4 +1,4 @@
-from matching.utils import clean_job_offer, lemmatize_job_offer
+from matching.utils import clean_text, lemmatize_text
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
@@ -7,10 +7,11 @@ class MatcherService:
     def __init__(self, user, job_description):
         self.user = user
         self.profile = user.profile
-        self.job_offer = clean_job_offer(job_description)
+        self.job_offer = clean_text(job_description)
+
+        self.lemmatized_job_offer = lemmatize_text(job_description)
 
         self.model = SentenceTransformer('all-mpnet-base-v2')
-        self.lemmatized_job_offer = lemmatize_job_offer(job_description)
 
     def match_technologies(self):
         ''' 
@@ -96,7 +97,8 @@ class MatcherService:
         - Returns ranked career items with relevance scores and matched concepts.
         - Focus on: contextual experience matching, complete work history
         '''
-        pass
+        experiences = self.profile.career_items.filter(item_type='experience')
+        education = self.profile.career_items.filter(item_type='education')
 
     def suggest_missing_elements(self):
         ''' Suggests action verbs, metrics, or phrases that appear in the job offer but are not present in the profile '''

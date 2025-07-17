@@ -1,30 +1,27 @@
-import re # Pattern: [^a-z0-9\s] -> Letters, numbers and spaces
+import re # Pattern:  r'[^a-z0-9\s]' -> Letters, numbers and spaces
 import unicodedata
 import spacy
 
 nlp = spacy.load("es_core_news_sm")  
 
-def clean_job_offer(job_offer):
-    job_offer = unicodedata.normalize('NFKD', job_offer).encode('ascii', 'ignore').decode('utf-8')
+def clean_text(text, pattern=None):
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
+    text = text.lower()
+    if pattern:
+        text = re.sub(pattern, '', text)
+    text_doc = nlp(text)
+    text = ' '.join([word.text for word in text_doc 
+                    if not word.is_stop])
+    
+    return text
 
-    job_offer = job_offer.lower()
+def lemmatize_text(text: str, pattern=None) -> list:
+    text = clean_text(text, pattern)
 
-    job_offer = re.sub(r'[^a-z0-9\s]', '', job_offer)
-
-    job_offer_doc = nlp(job_offer)
-    job_offer = ' '.join([word.text for word in job_offer_doc 
-                          if not word.is_stop])  
-
-    return job_offer
-
-def lemmatize_job_offer(job_offer: str) -> list:
-    job_offer = clean_job_offer(job_offer)
-
-    job_offer_doc = nlp(job_offer)
-    lemmatized_words = [word.lemma_ for word in job_offer_doc]
+    text_doc = nlp(text)
+    lemmatized_words = [word.lemma_ for word in text_doc if word.lemma_.strip()]
 
     return lemmatized_words
 
-print(clean_job_offer("Software Engineer - Python & Django - Oferta de Trabajo increíble...!"))
-print(lemmatize_job_offer("Software Engineer - Python & Django - Oferta de Trabajo increíble...!"))
-print(lemmatize_job_offer("Desarrollo soluciones con Python, trabajé con Ruby y tengo experiencia trabajando en equipos ágiles."))
+print(clean_text("Software Engineer - Python & Django - Oferta de Trabajo increíble...!", r'[^a-z0-9\s]'))
+print(lemmatize_text("Software Engineer - Python & Django - Oferta de Trabajo increíble...!", r'[^a-z0-9\s]'))
