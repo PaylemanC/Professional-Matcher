@@ -1,21 +1,27 @@
 from matching.utils import clean_text, lemmatize_text, extract_action_verbs, extract_soft_skills, extract_relevant_phrases
-from sentence_transformers import SentenceTransformer
-from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
 from technologies.models import Technology
 from profiles.utils import build_user_profile_text, find_keyword_in_profile, lemmatize_profile_career_item
+from .model_singleton import model_singleton, EmbeddingCache
 
 class MatcherService:
     def __init__(self, user, job_description):
         self.user = user
         self.profile = user.profile
         self.job_offer = clean_text(job_description, r'[^a-z0-9\s]')
-
         self.lemmatized_job_offer = lemmatize_text(job_description, r'[^a-z0-9\s]')
+        
+        # Singleton
+        self.model = model_singleton.get_sentence_transformer('all-MiniLM-L6-v2')
+        self.kw_model = model_singleton.get_keybert_model('all-MiniLM-L6-v2')
 
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')  # all-mpnet-base-v2
-        self.kw_model = KeyBERT(model=self.model)
+        # Cache technologies
+        self._all_technologies = None 
+    def get_all_technologies(self):
+        if self._all_technologies is None:
+            self._all_technologies = set(Technology.objects.values_list('name', flat=True))
+        return self._all_technologies
 
     def match_technologies(self):
         ''' 
@@ -32,25 +38,36 @@ class MatcherService:
         user_technologies = [tech.name for tech in self.profile.technologies.all()]
         
         if not user_technologies:
-            return {
+            self.technology_match_results = {
                 'matched_technologies': [],
                 'missing_technologies': [],
                 'match_score': 0.0,
                 'details': []
             }
+            return self.technology_match_results
         
         job_technologies = extract_techs_from_desc(self.lemmatized_job_offer)
         
         if not job_technologies:
-            return {
+            self.technology_match_results = {
                 'matched_technologies': [],
                 'missing_technologies': user_technologies,
                 'match_score': 0.0,
                 'details': []
             }
+            return self.technology_match_results
         
-        user_embeddings = self.model.encode(user_technologies)
-        job_embeddings = self.model.encode(job_technologies)
+        # Cache embeddings
+        user_embeddings = EmbeddingCache.get_or_compute_batch(user_technologies, self.model)
+        job_embeddings = EmbeddingCache.get_or_compute_batch(job_technologies, self.model)
+        if len(user_embeddings) == 0 or len(job_embeddings) == 0:
+            self.technology_match_results = {
+                'matched_technologies': [],
+                'missing_technologies': job_technologies,
+                'match_score': 0.0,
+                'details': []
+            }
+            return self.technology_match_results
         
         similarity_matrix = cosine_similarity(user_embeddings, job_embeddings)
         
@@ -103,20 +120,31 @@ class MatcherService:
         )        
         job_keywords_list = [keyword[0] for keyword in job_keywords_with_scores]
         
-        all_technologies = set(Technology.objects.all().values_list('name', flat=True))
+        all_technologies = self.get_all_technologies()
         job_keywords_list = [kw for kw in job_keywords_list 
                            if not any(tech in kw.lower() for tech in all_technologies)]
         
         user_profile_text = build_user_profile_text(self.profile)
         if not user_profile_text:
-            return {
+            self.keyword_match_results = {
                 'matched_keywords': [],
                 'missing_keywords': job_keywords_list,
                 'match_score': 0.0,
                 'details': []
             }
+            return self.keyword_match_results
         
-        job_embeddings = self.model.encode(job_keywords_list)
+        if not job_keywords_list:
+            self.keyword_match_results = {
+                'matched_keywords': [],
+                'missing_keywords': [],
+                'match_score': 0.0,
+                'details': []
+            }
+            return self.keyword_match_results
+            
+        # Cache embeddings
+        job_embeddings = EmbeddingCache.get_or_compute_batch(job_keywords_list, self.model)
         
         user_keywords = self.kw_model.extract_keywords(
             user_profile_text,
@@ -129,19 +157,31 @@ class MatcherService:
 
         user_keywords_terms = [keyword[0] for keyword in user_keywords]
         
+        all_technologies = self.get_all_technologies()
         user_keywords_terms = [kw for kw in user_keywords_terms 
                              if not any(tech in kw.lower() for tech in all_technologies)]
 
         if not user_keywords_terms:
-            return {
+            self.keyword_match_results = {
                 'matched_keywords': [],
                 'missing_keywords': job_keywords_list,
                 'match_score': 0.0,
                 'details': []
             }
-        
-        user_embeddings = self.model.encode(user_keywords_terms)
-        
+            return self.keyword_match_results
+
+        # Cache embeddings
+        user_embeddings = EmbeddingCache.get_or_compute_batch(user_keywords_terms, self.model)
+
+        if len(job_embeddings) == 0 or len(user_embeddings) == 0:
+            self.keyword_match_results = {
+                'matched_keywords': [],
+                'missing_keywords': job_keywords_list,
+                'match_score': 0.0,
+                'details': []
+            }
+            return self.keyword_match_results
+            
         similarity_matrix = cosine_similarity(job_embeddings, user_embeddings)
 
         threshold = 0.70           
@@ -192,8 +232,8 @@ class MatcherService:
         
         job_text = ' '.join(self.lemmatized_job_offer)
         
-        experiences = self.profile.career_items.filter(item_type='experience')
-        education = self.profile.career_items.filter(item_type='education')
+        experiences = self.profile.career_items.select_related().filter(item_type='experience')
+        education = self.profile.career_items.select_related().filter(item_type='education')
         all_career_items = list(experiences) + list(education)
         
         if not all_career_items:
@@ -225,16 +265,25 @@ class MatcherService:
                 })
         
         if not career_item_texts:
-            return {
+            self.career_items_results = {
                 'ranked_career_items': [],
                 'relevance_scores': [],
                 'details': []
             }
+            return self.career_items_results
+
+        # Cache embeddings
+        job_embedding = EmbeddingCache.get_or_compute(job_text, self.model)
+        career_embeddings = EmbeddingCache.get_or_compute_batch(career_item_texts, self.model)
+        if len(career_embeddings) == 0:
+            self.career_items_results = {
+                'ranked_career_items': [],
+                'relevance_scores': [],
+                'details': []
+            }
+            return self.career_items_results
         
-        job_embedding = self.model.encode([job_text])
-        career_embeddings = self.model.encode(career_item_texts)
-        
-        similarities = cosine_similarity(job_embedding, career_embeddings)[0]
+        similarities = cosine_similarity([job_embedding], career_embeddings)[0]
         
         ranked_results = []
         for i, (similarity_score, detail) in enumerate(zip(similarities, career_item_details)):
@@ -288,7 +337,8 @@ class MatcherService:
                 'description': 'Metodologías, certificaciones y otros relevantes'
             }
         }
-        
+
+        # Cache embeddings (utils)
         action_verbs = extract_action_verbs(job_text, user_profile_text)
         soft_skills = extract_soft_skills(job_text, user_profile_text, self.model)
         phrases = extract_relevant_phrases(job_text, user_profile_text, self.kw_model, self.model)

@@ -14,7 +14,10 @@ def dashboard(request):
         return redirect('index') 
     
     try:
-        request.user.profile
+        profile = ProfessionalProfile.objects.select_related('fk_user').prefetch_related(
+            'technologies', 'career_items'
+        ).get(fk_user=request.user)
+        request.user.profile = profile
     except ProfessionalProfile.DoesNotExist:
         messages.warning(request, 'Debes crear un perfil profesional antes de usar el matcher.')
         return redirect('profile_create')

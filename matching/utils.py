@@ -3,7 +3,14 @@ import unicodedata
 import spacy
 from sklearn.metrics.pairwise import cosine_similarity
 
-nlp = spacy.load("es_core_news_sm")  
+nlp = spacy.load("es_core_news_sm")
+
+def get_cached_embedding(text, model):
+    try:
+        from .services.model_singleton import EmbeddingCache
+        return EmbeddingCache.get_or_compute(text, model)
+    except ImportError:
+        return model.encode([text])[0]
 
 def clean_text(text: str, pattern=None):
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
@@ -94,10 +101,15 @@ def extract_relevant_phrases(job_text, user_profile_text, kw_model, model):
     
     if user_profile_text and relevant_phrases:
         phrases_text = [phrase[0] for phrase in relevant_phrases]
-        phrase_embeddings = model.encode(phrases_text)
-        user_embedding = model.encode([user_profile_text])
-        
-        similarities = cosine_similarity(phrase_embeddings, user_embedding)
+        try:
+            from .services.model_singleton import EmbeddingCache
+            phrase_embeddings = EmbeddingCache.get_or_compute_batch(phrases_text, model)
+            user_embedding = EmbeddingCache.get_or_compute(user_profile_text, model)
+            similarities = cosine_similarity(phrase_embeddings, [user_embedding])
+        except ImportError:
+            phrase_embeddings = model.encode(phrases_text)
+            user_embedding = model.encode([user_profile_text])
+            similarities = cosine_similarity(phrase_embeddings, user_embedding)
 
         for i, (phrase, original_score) in enumerate(relevant_phrases):
             similarity = similarities[i][0]
@@ -161,10 +173,15 @@ def extract_soft_skills(job_text, user_profile_text, model):
             'similarity_score': 0.0
         } for skill in job_skills]
     
-    skills_embeddings = model.encode(job_skills)
-    user_embedding = model.encode([user_profile_text])
-    
-    similarities = cosine_similarity(skills_embeddings, user_embedding)
+    try:
+        from .services.model_singleton import EmbeddingCache
+        skills_embeddings = EmbeddingCache.get_or_compute_batch(job_skills, model)
+        user_embedding = EmbeddingCache.get_or_compute(user_profile_text, model)
+        similarities = cosine_similarity(skills_embeddings, [user_embedding])
+    except ImportError:
+        skills_embeddings = model.encode(job_skills)
+        user_embedding = model.encode([user_profile_text])
+        similarities = cosine_similarity(skills_embeddings, user_embedding)
     
     missing_skills = []
     for i, skill in enumerate(job_skills):
