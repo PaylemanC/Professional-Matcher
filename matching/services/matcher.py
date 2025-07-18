@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
+from technologies.models import Technology
 from profiles.utils import build_user_profile_text, find_keyword_in_profile, lemmatize_profile_career_item
 
 class MatcherService:
@@ -102,6 +103,10 @@ class MatcherService:
         )        
         job_keywords_list = [keyword[0] for keyword in job_keywords_with_scores]
         
+        all_technologies = set(Technology.objects.all().values_list('name', flat=True))
+        job_keywords_list = [kw for kw in job_keywords_list 
+                           if not any(tech in kw.lower() for tech in all_technologies)]
+        
         user_profile_text = build_user_profile_text(self.profile)
         if not user_profile_text:
             return {
@@ -123,6 +128,10 @@ class MatcherService:
         )        
 
         user_keywords_terms = [keyword[0] for keyword in user_keywords]
+        
+        user_keywords_terms = [kw for kw in user_keywords_terms 
+                             if not any(tech in kw.lower() for tech in all_technologies)]
+
         if not user_keywords_terms:
             return {
                 'matched_keywords': [],
