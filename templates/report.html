@@ -1,2 +1,122 @@
-<p>Resultado del análisis:</p>
-<p>{{ result }}</p>
+{% load static %}
+
+<div id="match-report">
+    <!-- Puntuación General -->
+    <div class="overall-score">
+        <h3>Puntuación General: {{ match_results.overall_score }}%</h3>
+        {% if match_results.overall_score >= 70 %}
+            <p class="score-message success">¡Excelente compatibilidad!</p>
+        {% elif match_results.overall_score >= 50 %}
+            <p class="score-message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
+        {% else %}
+            <p class="score-message info">Hay oportunidades para mejorar tu perfil.</p>
+        {% endif %}
+    </div>
+
+    <!-- Tecnologías -->
+    <div class="technologies">
+        <h3>Tecnologías ({{ match_results.technology_match.match_score|floatformat:1 }}%)</h3>
+        {% if match_results.technology_match.matched_technologies %}
+            <p>✅ Tecnologías que dominas:</p>
+                <ul>
+                    {% for tech in match_results.technology_match.matched_technologies %}
+                        <li>{{ tech }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        {% if match_results.technology_match.missing_technologies %}
+            <p>❌ Tecnologías que te faltan:</p>
+            <ul>
+                {% for tech in match_results.technology_match.missing_technologies %}
+                    <li>{{ tech }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <!-- Palabras Clave -->
+    <div>
+        <h3>Palabras Clave y Habilidades ({{ match_results.keyword_match.match_score|floatformat:1 }}%)</h3>
+        {% if match_results.keyword_match.matched_keywords %}
+            <p>✅ Palabras clave que coinciden:</p>
+            <ul>
+                {% for keyword in match_results.keyword_match.matched_keywords %}
+                    <li>{{ keyword }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if match_results.keyword_match.missing_keywords %}
+            <p>❌ Palabras clave que faltan:</p>
+            <ul>
+                {% for keyword in match_results.keyword_match.missing_keywords %}
+                    <li>{{ keyword }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <!-- Experiencia Relevante -->
+    <div>
+        <h3>Experiencia Más Relevante</h3>
+        {% if match_results.career_items.details %}
+            <div>
+                {% for item in match_results.career_items.details|slice:":3" %}
+                    <div>
+                        <p>{{ item.title }} - {{ item.institution }}</p>
+                        <p>Relevancia: {{ item.relevance_score|floatformat:2 }}</p>
+                        <p>Tipo: {{ item.type|capfirst }}</p>
+                        {% if item.description %}
+                            <p>{{ item.description|truncatewords:20 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No se encontraron experiencias relevantes. Considera agregar más detalles a tu perfil.</p>
+        {% endif %}
+    </div>
+
+    <!-- Sugerencias de Mejora -->
+    <div>
+        <h3>Sugerencias de Mejora</h3>        
+        {% if match_results.missing_elements.action_verbs.items %}
+            <p>📝 Verbos de acción sugeridos:</p>
+            <ul>
+                {% for verb in match_results.missing_elements.action_verbs.items|slice:":5" %}
+                    <li>{{ verb }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if match_results.missing_elements.soft_skills.items %}
+            <div class="suggestions">
+                <p>🤝 Habilidades blandas mencionadas:</p>
+                <ul>
+                    {% for skill in match_results.missing_elements.soft_skills.items|slice:":5" %}
+                        <li>{{ skill.skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        {% if match_results.missing_elements.phrases.items %}
+            <div class="suggestions">
+                <p>🔧 Metodologías y certificaciones:</p>
+                <ul>
+                    {% for phrase in match_results.missing_elements.phrases.items|slice:":5" %}
+                        <li>{{ phrase.phrase }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Oferta Laboral Analizada -->
+    <div>
+        <h3>Oferta Laboral Analizada</h3>
+        <p>{{ match_results.job_offer|truncatewords:50 }}</p>
+    </div>
+</div>
