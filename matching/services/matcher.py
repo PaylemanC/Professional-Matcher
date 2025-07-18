@@ -1,4 +1,4 @@
-from matching.utils import clean_text, lemmatize_text
+from matching.utils import clean_text, lemmatize_text, extract_action_verbs, extract_soft_skills, extract_relevant_phrases
 from sentence_transformers import SentenceTransformer
 from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
@@ -255,12 +255,73 @@ class MatcherService:
         return self.career_items_results
 
     def suggest_missing_elements(self):
-        ''' Suggests action verbs, metrics, or phrases that appear in the job offer but are not present in the profile '''
-        pass
+        ''' Suggests action verbs, metrics, soft skills or phrases that appear in the job offer but are not present in the profile '''
+        if not hasattr(self, 'keyword_match_results'):
+            self.highlight_keywords()
+        
+        job_text = ' '.join(self.lemmatized_job_offer)
+        user_profile_text = build_user_profile_text(self.profile)
+
+        suggestions = {
+            'action_verbs': {
+                'items': [],
+                'count': 0,
+                'description': 'Verbos de acción detectados en la oferta que no están en tu perfil'
+            },
+            'soft_skills': {
+                'items': [],
+                'count': 0,
+                'description': 'Habilidades blandas mencionadas en la oferta'
+            },
+            'phrases': {
+                'items': [],
+                'count': 0,
+                'description': 'Metodologías, certificaciones y otros relevantes'
+            }
+        }
+        
+        action_verbs = extract_action_verbs(job_text, user_profile_text)
+        soft_skills = extract_soft_skills(job_text, user_profile_text, self.model)
+        phrases = extract_relevant_phrases(job_text, user_profile_text, self.kw_model, self.model)
+        
+        suggestions['action_verbs']['items'] = action_verbs
+        suggestions['action_verbs']['count'] = len(action_verbs)
+        
+        suggestions['soft_skills']['items'] = soft_skills
+        suggestions['soft_skills']['count'] = len(soft_skills)
+        
+        suggestions['phrases']['items'] = phrases
+        suggestions['phrases']['count'] = len(phrases)
+        
+        self.missing_elements_results = suggestions
+        return self.missing_elements_results
 
     def score_match(self):
         ''' Returns a score based on the match between user profile and job offer '''
-        pass
+        TECH = 0.50     
+        KEYWORDS = 0.30  
+        CAREER = 0.20   
+        
+        tech_score = getattr(self, 'technology_match_results', {}).get('match_score', 0.0)
+
+        keywords_score = getattr(self, 'keyword_match_results', {}).get('match_score', 0.0)
+
+        career_results = getattr(self, 'career_items_results', {})
+        career_scores = career_results.get('relevance_scores', [])
+        if career_scores:
+            top_career_scores = sorted(career_scores, reverse=True)[:3]
+            career_score = sum(score * 100 for score in top_career_scores) / len(top_career_scores)
+        else:
+            career_score = 0.0
+        
+        final_score = (
+            tech_score * TECH +
+            keywords_score * KEYWORDS +
+            career_score * CAREER
+        )
+        final_score = max(0.0, min(100.0, final_score))
+
+        return round(final_score, 1)
 
     def match(self):
         ''' Main method to execute the matching process '''
