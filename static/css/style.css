@@ -1,3 +1,46 @@
-h1 {
-    color: rgb(61, 129, 255);
+:root {
+  --primary-color: #31398E;
+  --soft-primary-color: #6D7BD3;
+  --softer-primary-color: #BAB6E8;
+  --secondary-color: #EFCB6D;
+  --text-color: #161616;
+  --background-color: #fdfdfd; 
+  --font-family: 'Lato', sans-serif;
 }
+
+/* ------------------- RESET ------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 1.6rem;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ------------------- GENERAL STYLES ------------------- */
+
+h1 {
+  color: var(--primary-color);
+} 
