@@ -8,14 +8,24 @@
         <h1 class="main__title">Professional Matcher</h1>
         <p class="main__subtitle">Analiza ofertas laborales IT y descubre qué tan compatible eres con ellas.</p>
         {% comment %} <img src="" alt=""> {% endcomment %}
+        <p class="main__subtitle">Optimiza tus postulaciones, adapta tu perfil a cada oportunidad y destaca habilidades relevantes.</p>
     </div>
     <div class="instructions--container">
-       <div class="instruction__card">
-            <div class="image"></div>
-            {% comment %} <img src="{% static 'images/icons/' %}" alt=""> {% endcomment %}
-            <p>Regístrate</p>
-            
-       </div>
+        <div class="instruction__card">
+            <div class="instruction-icon--container">{% comment %} <img src="{% static 'images/icons/' %}" alt="" class="instruction-icon"> {% endcomment %}</div>
+            <p class="instruction__title">Regístrate</p>
+            <p class="instruction__description">Crea una cuenta para acceder a resultados personalizados.</p>
+        </div>
+         <div class="instruction__card">
+            <div class="instruction-icon--container">{% comment %} <img src="{% static 'images/icons/' %}" alt="" class="instruction-icon"> {% endcomment %}</div>
+            <p class="instruction__title">Crea tu perfil profesional</p>
+            <p class="instruction__description">Completa tu perfil profesional con tus habilidades, experiencia y tecnologías dominantes</p>
+        </div>
+         <div class="instruction__card">
+            <div class="instruction-icon--container">{% comment %} <img src="{% static 'images/icons/' %}" alt="" class="instruction-icon"> {% endcomment %}</div>
+            <p class="instruction__title">Analiza</p>
+            <p class="instruction__description">Compara las descripciones de las ofertas laborales directamente con tu perfil.</p>
+        </div>
     </div>
 </section>
 {% endblock content %}
