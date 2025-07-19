@@ -6,10 +6,10 @@ from profiles.models import ProfessionalProfile
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('home')
     return render(request, 'index.html')
 
-def dashboard(request):
+def home(request):
     if not request.user.is_authenticated:
         return redirect('index') 
     
@@ -51,7 +51,7 @@ def dashboard(request):
                 messages.error(request, f'Error al procesar la oferta laboral: {str(e)}')
                 match_results = None
 
-    return render(request, 'dashboard.html', { 
+    return render(request, 'home.html', { 
                 'form': form, 
                 'match_results': match_results
             })
