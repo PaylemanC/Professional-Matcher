@@ -11,9 +11,13 @@ class EnsureProfileOnPostMiddleware:
     """
     def __init__(self, get_response):
         self.get_response = get_response
+        self.excluded_paths = [
+            reverse("logout"),
+            reverse("login"),
+        ]
 
     def __call__(self, request):
-        if request.method == "POST" and request.user.is_authenticated:
+        if request.method == "POST" and request.user.is_authenticated and request.path not in self.excluded_paths:
             has_profile = ProfessionalProfile.objects.filter(fk_user=request.user).exists()
             if not has_profile:
                 messages.warning(
