@@ -12,24 +12,35 @@ def get_cached_embedding(text, model):
     except ImportError:
         return model.encode([text])[0]
 
-def clean_text(text: str, pattern=None):
+def clean_text(text: str, with_stop_words=False) -> str:
+    '''
+    Returns a cleaned version of the input text.
+    - Normalizes unicode characters to ASCII.
+    - Converts to lowercase.
+    - Removes non-alphanumeric characters (except spaces).
+    - Optionally removes stop words if with_stop_words is True.
+    '''
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
     text = text.lower()
-    if pattern:
-        text = re.sub(pattern, '', text)
+    text = re.sub(r'[^a-z0-9\s]', '', text)
     text_doc = nlp(text)
-    text = ' '.join([word.text for word in text_doc 
-                    if not word.is_stop])
+    if with_stop_words == False:
+        text = ' '.join([word.text for word in text_doc if not word.is_stop])
     
     return text
 
-def lemmatize_text(text: str, pattern=None) -> list:
-    text = clean_text(text, pattern)
+def lemmatize_text(text: str, with_stop_words=False) -> str:
+    '''
+    Returns a lemmatized version of the input text.
+    - With clean_text.
+    - Uses spaCy's lemmatization.
+    '''
+    text = clean_text(text, with_stop_words)
 
     text_doc = nlp(text)
     lemmatized_words = [word.lemma_ for word in text_doc if word.lemma_.strip()]
 
-    return lemmatized_words
+    return ' '.join(lemmatized_words)
 
 def find_keyword(keyword: str, text_sources: dict) -> list:
     if not keyword or not text_sources:

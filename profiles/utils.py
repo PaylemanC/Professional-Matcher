@@ -7,11 +7,11 @@ def clean_profile_career_item(career_item):
     if not career_item:
         return {"title": "", "description": ""}
     
-    title = clean_text(career_item.title)
+    title = clean_text(career_item.title, with_stop_words=True)
     
     description = ""
     if career_item.description:
-        description = clean_text(career_item.description)
+        description = clean_text(career_item.description, with_stop_words=True)
     
     return {
         "title": title,
@@ -41,7 +41,7 @@ def build_user_profile_text(profile):
     profile_parts = []
     
     if profile.bio:
-        cleaned_bio = clean_text(profile.bio)
+        cleaned_bio = clean_text(profile.bio, with_stop_words=True)
         if cleaned_bio:  
             profile_parts.append(cleaned_bio)
     

@@ -1,4 +1,4 @@
-from matching.utils import clean_text, lemmatize_text, extract_action_verbs, extract_soft_skills, extract_relevant_phrases
+from matching.utils import lemmatize_text, extract_action_verbs, extract_soft_skills, extract_relevant_phrases
 from sklearn.metrics.pairwise import cosine_similarity
 from technologies.utils import extract_techs_from_desc
 from technologies.models import Technology
@@ -9,8 +9,8 @@ class MatcherService:
     def __init__(self, user, job_description):
         self.user = user
         self.profile = user.profile
-        self.job_offer = clean_text(job_description, r'[^a-z0-9\s]')
-        self.lemmatized_job_offer = lemmatize_text(job_description, r'[^a-z0-9\s]')
+        self.job_description = job_description
+        self.lemmatized_job_offer = lemmatize_text(job_description)
         
         # Singleton
         self.model = model_singleton.get_sentence_transformer('all-MiniLM-L6-v2')
@@ -109,9 +109,8 @@ class MatcherService:
         - Returns matched and missing keywords with their sources.
         - Focus on: soft skills, methodologies, certifications, etc. 
         '''
-        job_text = ' '.join(self.lemmatized_job_offer)
         job_keywords_with_scores = self.kw_model.extract_keywords(
-            job_text, 
+            self.lemmatized_job_offer, 
             keyphrase_ngram_range=(1, 2),  
             stop_words=None,  
             top_n=10, 
@@ -230,8 +229,6 @@ class MatcherService:
         if not hasattr(self, 'keyword_match_results'):
             self.highlight_keywords()
         
-        job_text = ' '.join(self.lemmatized_job_offer)
-        
         experiences = self.profile.career_items.select_related().filter(item_type='experience')
         education = self.profile.career_items.select_related().filter(item_type='education')
         all_career_items = list(experiences) + list(education)
@@ -273,7 +270,7 @@ class MatcherService:
             return self.career_items_results
 
         # Cache embeddings
-        job_embedding = EmbeddingCache.get_or_compute(job_text, self.model)
+        job_embedding = EmbeddingCache.get_or_compute(self.lemmatized_job_offer, self.model)
         career_embeddings = EmbeddingCache.get_or_compute_batch(career_item_texts, self.model)
         if len(career_embeddings) == 0:
             self.career_items_results = {
@@ -316,8 +313,6 @@ class MatcherService:
         ''' Suggests action verbs, metrics, soft skills or phrases that appear in the job offer but are not present in the profile '''
         if not hasattr(self, 'keyword_match_results'):
             self.highlight_keywords()
-        
-        job_text = ' '.join(self.lemmatized_job_offer)
         user_profile_text = build_user_profile_text(self.profile)
 
         suggestions = {
@@ -339,9 +334,9 @@ class MatcherService:
         }
 
         # Cache embeddings (utils)
-        action_verbs = extract_action_verbs(job_text, user_profile_text)
-        soft_skills = extract_soft_skills(job_text, user_profile_text, self.model)
-        phrases = extract_relevant_phrases(job_text, user_profile_text, self.kw_model, self.model)
+        action_verbs = extract_action_verbs(self.lemmatized_job_offer, user_profile_text)
+        soft_skills = extract_soft_skills(self.lemmatized_job_offer, user_profile_text, self.model)
+        phrases = extract_relevant_phrases(self.lemmatized_job_offer, user_profile_text, self.kw_model, self.model)
         
         suggestions['action_verbs']['items'] = action_verbs
         suggestions['action_verbs']['count'] = len(action_verbs)
