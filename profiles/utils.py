@@ -1,5 +1,5 @@
 import spacy
-from matching.utils import clean_text, find_keyword
+from matching.utils import clean_text
 
 nlp = spacy.load("es_core_news_sm")  
 
@@ -56,20 +56,3 @@ def build_user_profile_text(profile):
             profile_parts.append(cleaned_item['description'])
     
     return ' '.join(profile_parts)
-
-def find_keyword_in_profile(keyword, profile):
-    text_sources = {}
-    
-    if profile.bio:
-        text_sources['bio'] = profile.bio
-    
-    career_items = profile.career_items.all()
-    if career_items:
-        for item in career_items:
-            text_sources[f'career_item_title_{item.id}'] = item.title
-            if item.description:
-                text_sources[f'career_item_desc_{item.id}'] = item.description
-    else:
-        text_sources['career_items'] = ''
-    
-    return find_keyword(keyword, text_sources)

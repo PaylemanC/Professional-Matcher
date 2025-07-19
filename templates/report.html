@@ -1,29 +1,29 @@
 {% load static %}
 
-<div id="match-report">
-    <!-- Puntuación General -->
-    <div class="overall-score">
-        <h3>Puntuación General: {{ match_results.overall_score }}%</h3>
-        {% if match_results.overall_score >= 70 %}
-            <p class="score-message success">¡Excelente compatibilidad!</p>
-        {% elif match_results.overall_score >= 50 %}
-            <p class="score-message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
-        {% else %}
-            <p class="score-message info">Hay oportunidades para mejorar tu perfil.</p>
-        {% endif %}
+{% if match_results %}
+    <div id="match-report">
+        <!-- Puntuación General -->
+        <div class="overall-score">
+            <h3>Puntuación General: {{ match_results.overall_score }}%</h3>
+            {% if match_results.overall_score >= 70 %}
+                <p class="score-message success">¡Excelente compatibilidad!</p>
+            {% elif match_results.overall_score >= 50 %}
+                <p class="score-message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
+            {% else %}
+                <p class="score-message info">Hay oportunidades para mejorar tu perfil.</p>
+            {% endif %}
+        </div>
     </div>
-
     <!-- Tecnologías -->
     <div class="technologies">
         <h3>Tecnologías ({{ match_results.technology_match.match_score|floatformat:1 }}%)</h3>
         {% if match_results.technology_match.matched_technologies %}
             <p>✅ Tecnologías que dominas:</p>
-                <ul>
-                    {% for tech in match_results.technology_match.matched_technologies %}
-                        <li>{{ tech }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul>
+                {% for tech in match_results.technology_match.matched_technologies %}
+                    <li>{{ tech }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
         
         {% if match_results.technology_match.missing_technologies %}
@@ -39,27 +39,40 @@
     <!-- Palabras Clave -->
     <div>
         <h3>Palabras Clave y Habilidades ({{ match_results.keyword_match.match_score|floatformat:1 }}%)</h3>
-        {% if match_results.keyword_match.matched_keywords %}
-            <p>✅ Palabras clave que coinciden:</p>
+        
+        <!-- Verbos de Acción -->
+        {% if match_results.keyword_match.matched_keywords.action_verbs.items %}
+            <p>✅ {{ match_results.keyword_match.matched_keywords.action_verbs.description }}:</p>
             <ul>
-                {% for keyword in match_results.keyword_match.matched_keywords %}
-                    <li>{{ keyword }}</li>
+                {% for verb in match_results.keyword_match.matched_keywords.action_verbs.items %}
+                    <li>{{ verb }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
         
-        {% if match_results.keyword_match.missing_keywords %}
-            <p>❌ Palabras clave que faltan:</p>
+        <!-- Habilidades Blandas -->
+        {% if match_results.keyword_match.matched_keywords.soft_skills.items %}
+            <p>✅ {{ match_results.keyword_match.matched_keywords.soft_skills.description }}:</p>
             <ul>
-                {% for keyword in match_results.keyword_match.missing_keywords %}
-                    <li>{{ keyword }}</li>
+                {% for skill in match_results.keyword_match.matched_keywords.soft_skills.items %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <!-- Frases Relevantes -->
+        {% if match_results.keyword_match.matched_keywords.phrases.items %}
+            <p>✅ {{ match_results.keyword_match.matched_keywords.phrases.description }}:</p>
+            <ul>
+                {% for phrase in match_results.keyword_match.matched_keywords.phrases.items %}
+                    <li>{{ phrase }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
     </div>
 
     <!-- Experiencia Relevante -->
-    <div>
+    {% comment %} <div>
         <h3>Experiencia Más Relevante</h3>
         {% if match_results.career_items.details %}
             <div>
@@ -77,40 +90,36 @@
         {% else %}
             <p>No se encontraron experiencias relevantes. Considera agregar más detalles a tu perfil.</p>
         {% endif %}
-    </div>
+    </div> {% endcomment %}
 
     <!-- Sugerencias de Mejora -->
     <div>
         <h3>Sugerencias de Mejora</h3>        
-        {% if match_results.missing_elements.action_verbs.items %}
-            <p>📝 Verbos de acción sugeridos:</p>
+        {% if match_results.keyword_match.missing_keywords.action_verbs.items %}
+            <p>📝 {{ match_results.keyword_match.missing_keywords.action_verbs.description }}:</p>
             <ul>
-                {% for verb in match_results.missing_elements.action_verbs.items|slice:":5" %}
+                {% for verb in match_results.keyword_match.missing_keywords.action_verbs.items|slice:":5" %}
                     <li>{{ verb }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
         
-        {% if match_results.missing_elements.soft_skills.items %}
-            <div class="suggestions">
-                <p>🤝 Habilidades blandas mencionadas:</p>
-                <ul>
-                    {% for skill in match_results.missing_elements.soft_skills.items|slice:":5" %}
-                        <li>{{ skill.skill }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        {% if match_results.keyword_match.missing_keywords.soft_skills.items %}
+            <p>🤝 {{ match_results.keyword_match.missing_keywords.soft_skills.description }}:</p>
+            <ul>
+                {% for skill in match_results.keyword_match.missing_keywords.soft_skills.items|slice:":5" %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
         
-        {% if match_results.missing_elements.phrases.items %}
-            <div class="suggestions">
-                <p>🔧 Metodologías y certificaciones:</p>
-                <ul>
-                    {% for phrase in match_results.missing_elements.phrases.items|slice:":5" %}
-                        <li>{{ phrase.phrase }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        {% if match_results.keyword_match.missing_keywords.phrases.items %}
+            <p>🔧 {{ match_results.keyword_match.missing_keywords.phrases.description }}:</p>
+            <ul>
+                {% for phrase in match_results.keyword_match.missing_keywords.phrases.items|slice:":5" %}
+                    <li>{{ phrase }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
     </div>
 

@@ -2,6 +2,7 @@ import re # Pattern:  r'[^a-z0-9\s]' -> Letters, numbers and spaces
 import unicodedata
 import spacy
 from sklearn.metrics.pairwise import cosine_similarity
+from matching.constants import COMMON_ACTION_VERBS, COMMON_SOFT_SKILLS, SOFT_SKILL_PATTERNS, RELEVANT_PHRASE_PATTERNS
 
 nlp = spacy.load("es_core_news_sm")
 
@@ -71,137 +72,138 @@ def find_action_verbs(text: str):
     
     return list(dict.fromkeys(action_verbs))
 
-def extract_action_verbs(job_text, user_profile_text):    
+def match_action_verbs(job_text, user_profile_text, model):
+    if not job_text or not user_profile_text:
+        return [], []
+    
     job_verbs = find_action_verbs(job_text)
-    user_verbs = find_action_verbs(user_profile_text) if user_profile_text else []
+    user_verbs = find_action_verbs(user_profile_text)
     
-    missing_verbs = list(set(job_verbs) - set(user_verbs)) # SET DIFFERENCE
+    if not job_verbs:
+        return [], []
     
-    return missing_verbs
-
-def extract_relevant_phrases(job_text, user_profile_text, kw_model, model):    
-    job_keyphrases = kw_model.extract_keywords(
-        job_text,
-        keyphrase_ngram_range=(2, 3),  
-        stop_words=None,
-        top_n=10,  
-        use_maxsum=True,
-        nr_candidates=20  
-    )
+    matched_verbs = []
+    missing_verbs = []
     
-    relevance_patterns = [
-        r'metodologia|metodologias|framework|frameworks',
-        r'certificacion|certificaciones|titulo|titulos',
-        r'testing|pruebas|qa|quality',
-        r'devops|ci/cd|continuous|deployment',
-        r'agile|agil|scrum|kanban',
-        r'cloud|nube|aws|azure|gcp',
-        r'api|rest|graphql|microservicio',
-        r'docker|kubernetes|container',
-        r'master|postgrado|especializacion|diplomado'
-    ]
-    
-    relevant_phrases = []
-    for phrase, score in job_keyphrases:
-        for pattern in relevance_patterns:
-            if re.search(pattern, phrase, re.IGNORECASE):
-                relevant_phrases.append((phrase, score))
-                break
-    
-    missing_phrases = []
-    
-    if user_profile_text and relevant_phrases:
-        phrases_text = [phrase[0] for phrase in relevant_phrases]
-        try:
-            from .services.model_singleton import EmbeddingCache
-            phrase_embeddings = EmbeddingCache.get_or_compute_batch(phrases_text, model)
-            user_embedding = EmbeddingCache.get_or_compute(user_profile_text, model)
-            similarities = cosine_similarity(phrase_embeddings, [user_embedding])
-        except ImportError:
-            phrase_embeddings = model.encode(phrases_text)
-            user_embedding = model.encode([user_profile_text])
-            similarities = cosine_similarity(phrase_embeddings, user_embedding)
-
-        for i, (phrase, original_score) in enumerate(relevant_phrases):
-            similarity = similarities[i][0]
+    for job_verb in job_verbs:
+        if job_verb in COMMON_ACTION_VERBS and job_verb in user_verbs:
+            matched_verbs.append({
+                'job_term': job_verb,
+                'user_term': job_verb,
+                'similarity_score': 1.0
+            })
+        elif job_verb in COMMON_ACTION_VERBS:
+            best_match = None
+            best_score = 0.0
             
-            if similarity < 0.4: 
-                missing_phrases.append({
-                    'phrase': phrase,
-                    'relevance_score': float(original_score),
-                    'similarity_score': float(similarity),
-                    'suggestion': f"Considera incluir experiencia con: {phrase}"
+            for user_verb in user_verbs:
+                if user_verb in COMMON_ACTION_VERBS:
+                    if len(set(job_verb) & set(user_verb)) >= 3:  
+                        score = len(set(job_verb) & set(user_verb)) / max(len(job_verb), len(user_verb))
+                        if score > best_score and score > 0.5:
+                            best_score = score
+                            best_match = user_verb
+            
+            if best_match:
+                matched_verbs.append({
+                    'job_term': job_verb,
+                    'user_term': best_match,
+                    'similarity_score': best_score
                 })
-    elif not user_profile_text:
-        for phrase, score in relevant_phrases:
-            missing_phrases.append({
-                'phrase': phrase,
-                'relevance_score': float(score),
-                'similarity_score': 0.0,
-                'suggestion': f"Considera incluir experiencia con: {phrase}"
-            })
+            else:
+                missing_verbs.append(job_verb)
+        else:
+            continue
     
-    return missing_phrases
+    return matched_verbs, missing_verbs
 
-def extract_soft_skills(job_text, user_profile_text, model):
-    skill_patterns = [
-        r'comunicacion\s*(efectiva|clara|asertiva)?',
-        r'presentacion\s*(oral|escrita|publica)?',
-        r'habilidades\s*de\s*comunicacion',
-        r'liderazgo\s*(de\s*equipos?)?',
-        r'gestion\s*de\s*equipos?',
-        r'coordinacion\s*de\s*equipos?',
-        r'mentoring|coaching',
-        r'pensamiento\s*(critico|analitico)',
-        r'resolucion\s*de\s*problemas',
-        r'analisis\s*(critico|detallado)',
-        r'toma\s*de\s*decisiones',
-        r'gestion\s*del?\s*tiempo',
-        r'organizacion\s*(personal|laboral)?',
-        r'planificacion\s*(estrategica|operativa)?',
-        r'multitarea|multi-tarea',
-        r'trabajo\s*en\s*equipo',
-        r'colaboracion\s*(efectiva)?',
-        r'empatia\s*(profesional)?',
-        r'adaptabilidad|flexibilidad',
-        r'gestion\s*de\s*proyectos?',
-        r'orientacion\s*a\s*resultados',
-        r'proactividad|iniciativa',
-        r'autonomia\s*(profesional)?'
-    ]
+def match_soft_skills(job_text, user_profile_text, model):
+    if not job_text or not user_profile_text:
+        return [], []
+    job_clean = clean_text(job_text, with_stop_words=True)
+    user_clean = clean_text(user_profile_text, with_stop_words=True)
     
-    job_skills = []
-    for pattern in skill_patterns:
-        matches = re.findall(pattern, job_text, re.IGNORECASE)
-        job_skills.extend(matches)
+    job_skills_found = []
+    user_skills_found = []
     
-    if not job_skills:
-        return []
-    if not user_profile_text:
-        return [{
-            'skill': skill,
-            'context': 'soft_skill',
-            'similarity_score': 0.0
-        } for skill in job_skills]
+    for skill in COMMON_SOFT_SKILLS:
+        if skill.lower() in job_clean.lower():
+            job_skills_found.append(skill)
+        if skill.lower() in user_clean.lower():
+            user_skills_found.append(skill)
     
-    try:
-        from .services.model_singleton import EmbeddingCache
-        skills_embeddings = EmbeddingCache.get_or_compute_batch(job_skills, model)
-        user_embedding = EmbeddingCache.get_or_compute(user_profile_text, model)
-        similarities = cosine_similarity(skills_embeddings, [user_embedding])
-    except ImportError:
-        skills_embeddings = model.encode(job_skills)
-        user_embedding = model.encode([user_profile_text])
-        similarities = cosine_similarity(skills_embeddings, user_embedding)
+    for pattern in SOFT_SKILL_PATTERNS:
+        job_matches = re.findall(pattern, job_clean, re.IGNORECASE)
+        user_matches = re.findall(pattern, user_clean, re.IGNORECASE)
+        
+        for match in job_matches:
+            if isinstance(match, tuple):
+                match = ' '.join(filter(None, match))
+            if match and match not in job_skills_found:
+                job_skills_found.append(match.strip())
+        
+        for match in user_matches:
+            if isinstance(match, tuple):
+                match = ' '.join(filter(None, match))
+            if match and match not in user_skills_found:
+                user_skills_found.append(match.strip())
     
-    missing_skills = []
-    for i, skill in enumerate(job_skills):
-        similarity = similarities[i][0]
-        if similarity < 0.3: 
-            missing_skills.append({
-                'skill': skill,
-                'context': 'soft_skill',
-                'similarity_score': float(similarity)
+    if not job_skills_found:
+        return [], []
+    
+    matched_skills = []
+    missing_skills = []    
+    for job_skill in job_skills_found:
+        if job_skill in user_skills_found:
+            matched_skills.append({
+                'job_term': job_skill,
+                'user_term': job_skill,
+                'similarity_score': 1.0
             })
+        else:
+            missing_skills.append(job_skill)
     
-    return missing_skills
+    return matched_skills, missing_skills
+
+def match_relevant_phrases(job_text, user_profile_text, model):
+    if not job_text or not user_profile_text:
+        return [], []
+    
+    job_clean = clean_text(job_text, with_stop_words=True)
+    user_clean = clean_text(user_profile_text, with_stop_words=True)
+    
+    job_phrases_found = []
+    user_phrases_found = []
+    
+    for pattern in RELEVANT_PHRASE_PATTERNS:
+        job_matches = re.findall(pattern, job_clean, re.IGNORECASE)
+        user_matches = re.findall(pattern, user_clean, re.IGNORECASE)
+        
+        for match in job_matches:
+            if isinstance(match, tuple):
+                match = ' '.join(filter(None, match))
+            if match and match not in job_phrases_found:
+                job_phrases_found.append(match.strip())
+        
+        for match in user_matches:
+            if isinstance(match, tuple):
+                match = ' '.join(filter(None, match))
+            if match and match not in user_phrases_found:
+                user_phrases_found.append(match.strip())
+    
+    if not job_phrases_found:
+        return [], []
+    
+    matched_phrases = []
+    missing_phrases = []    
+    for job_phrase in job_phrases_found:
+        if job_phrase.lower() in user_clean.lower():
+            matched_phrases.append({
+                'job_term': job_phrase,
+                'user_term': job_phrase,
+                'similarity_score': 1.0
+            })
+        else:
+            missing_phrases.append(job_phrase)
+    
+    return matched_phrases, missing_phrases
