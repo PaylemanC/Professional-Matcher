@@ -13,14 +13,16 @@ def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('index') 
     
-    try:
-        profile = ProfessionalProfile.objects.select_related('fk_user').prefetch_related(
-            'technologies', 'career_items'
-        ).get(fk_user=request.user)
+    profile = (
+        ProfessionalProfile.objects
+        .select_related('fk_user')
+        .prefetch_related('technologies', 'career_items')
+        .filter(fk_user=request.user)
+        .first()
+    )
+
+    if profile:
         request.user.profile = profile
-    except ProfessionalProfile.DoesNotExist:
-        messages.warning(request, 'Debes crear un perfil profesional antes de usar el matcher.')
-        return redirect('profile_create')
     
     form = JobOfferForm()
     match_results = None
