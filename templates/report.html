@@ -72,25 +72,33 @@
     </div>
 
     <!-- Experiencia Relevante -->
-    {% comment %} <div>
-        <h3>Experiencia Más Relevante</h3>
+    <div class="career-experience">
+        <h3>Experiencia Laboral Más Relevante</h3>
         {% if match_results.career_items.details %}
             <div>
                 {% for item in match_results.career_items.details|slice:":3" %}
                     <div>
-                        <p>{{ item.title }} - {{ item.institution }}</p>
-                        <p>Relevancia: {{ item.relevance_score|floatformat:2 }}</p>
-                        <p>Tipo: {{ item.type|capfirst }}</p>
+                        <h4>{{ item.title }} - {{ item.institution }}</h4>
+                        <p><strong>Relevancia:</strong> {{ item.relevance_score|floatformat:2 }} ({{ item.relevance_score|floatformat:0 }}%)</p>
+                        <p><strong>Periodo:</strong> 
+                            {{ item.start_date|date:"M Y" }}
+                            {% if item.end_date %}
+                                - {{ item.end_date|date:"M Y" }}
+                            {% else %}
+                                - Actualidad
+                            {% endif %}
+                        </p>
                         {% if item.description %}
-                            <p>{{ item.description|truncatewords:20 }}</p>
+                            <p><strong>Descripción:</strong> {{ item.description|truncatewords:25 }}</p>
                         {% endif %}
+                        <hr>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No se encontraron experiencias relevantes. Considera agregar más detalles a tu perfil.</p>
+            <p>No se encontraron experiencias laborales relevantes. Considera agregar más experiencias laborales a tu perfil.</p>
         {% endif %}
-    </div> {% endcomment %}
+    </div>
 
     <!-- Sugerencias de Mejora -->
     <div>
@@ -122,6 +130,8 @@
             </ul>
         {% endif %}
     </div>
+
+{% endif %}
 
     <!-- Oferta Laboral Analizada -->
     <div>

@@ -39,7 +39,7 @@ def dashboard(request):
                     'overall_score': overall_score,
                     'technology_match': matcher.technology_match_results,
                     'keyword_match': matcher.keyword_match_results,
-                    # 'career_items': matcher.career_items_results,
+                    'career_items': matcher.career_items_results,
                     'job_offer': job_text
                 }
                 

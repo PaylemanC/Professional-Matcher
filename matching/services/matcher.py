@@ -193,116 +193,139 @@ class MatcherService:
         
         return self.keyword_match_results
 
-    # def related_career_items(self):
-    #     ''' 
-    #     Ranks user's career items by relevance to the job offer.
-    #     - Uses semantic similarity to score complete career experiences against job requirements.
-    #     - Returns ranked career items with relevance scores and matched concepts.
-    #     - Focus on: contextual experience matching, complete work history
-    #     '''        
-    #     experiences = self.profile.career_items.select_related().filter(item_type='experience')
-    #     education = self.profile.career_items.select_related().filter(item_type='education')
-    #     all_career_items = list(experiences) + list(education)
+    def related_career_items(self):
+        ''' 
+        Ranks user's work experiences by relevance to the job offer.
+        - Uses semantic similarity to score complete work experiences against job requirements.
+        - Returns ranked experiences with relevance scores and matched concepts.
+        - Focus on: work experience only.
+        '''        
+        experiences = self.profile.career_items.select_related().filter(item_type='experience')
         
-    #     if not all_career_items:
-    #         return {
-    #             'ranked_career_items': [],
-    #             'relevance_scores': [],
-    #             'details': []
-    #         }
+        if not experiences:
+            self.career_items_results = {
+                'ranked_career_items': [],
+                'relevance_scores': [],
+                'details': []
+            }
+            return self.career_items_results
         
-    #     career_item_texts = []
-    #     career_item_details = []        
-    #     for item in all_career_items:
-    #         lemmatized_item = lemmatize_profile_career_item(item)
-            
-    #         title_tokens = lemmatized_item['title'] if lemmatized_item['title'] else []
-    #         desc_tokens = lemmatized_item['description'] if lemmatized_item['description'] else []
-            
-    #         all_tokens = title_tokens + desc_tokens
-    #         item_text = ' '.join(all_tokens).strip()
-            
-    #         if item_text: 
-    #             career_item_texts.append(item_text)
-    #             career_item_details.append({
-    #                 'career_item': item,
-    #                 'text': item_text,
-    #                 'type': item.item_type,
-    #                 'title_tokens': title_tokens,
-    #                 'desc_tokens': desc_tokens
-    #             })
+        career_item_texts = []
+        career_item_details = []        
         
-    #     if not career_item_texts:
-    #         self.career_items_results = {
-    #             'ranked_career_items': [],
-    #             'relevance_scores': [],
-    #             'details': []
-    #         }
-    #         return self.career_items_results
+        for item in experiences:
+            try:
+                lemmatized_item = lemmatize_profile_career_item(item)
+                
+                title_tokens = lemmatized_item.get('title', []) or []
+                desc_tokens = lemmatized_item.get('description', []) or []
+                
+                all_tokens = title_tokens + desc_tokens
+                item_text = ' '.join(all_tokens).strip()
+                
+                if item_text: 
+                    career_item_texts.append(item_text)
+                    career_item_details.append({
+                        'career_item': item,
+                        'text': item_text,
+                        'type': item.item_type,
+                        'title_tokens': title_tokens,
+                        'desc_tokens': desc_tokens
+                    })
+            except Exception as e:
+                continue
+        
+        if not career_item_texts:
+            self.career_items_results = {
+                'ranked_career_items': [],
+                'relevance_scores': [],
+                'details': []
+            }
+            return self.career_items_results
 
-    #     # Cache embeddings
-    #     job_embedding = EmbeddingCache.get_or_compute(self.lemmatized_job_offer, self.model)
-    #     career_embeddings = EmbeddingCache.get_or_compute_batch(career_item_texts, self.model)
-    #     if len(career_embeddings) == 0:
-    #         self.career_items_results = {
-    #             'ranked_career_items': [],
-    #             'relevance_scores': [],
-    #             'details': []
-    #         }
-    #         return self.career_items_results
+        try:
+            job_embedding = EmbeddingCache.get_or_compute(self.lemmatized_job_offer, self.model)
+            career_embeddings = EmbeddingCache.get_or_compute_batch(career_item_texts, self.model)
+            
+            if len(career_embeddings) == 0:
+                self.career_items_results = {
+                    'ranked_career_items': [],
+                    'relevance_scores': [],
+                    'details': []
+                }
+                return self.career_items_results
+            
+            similarities = cosine_similarity([job_embedding], career_embeddings)[0]
+            
+            ranked_results = []
+            for i, (similarity_score, detail) in enumerate(zip(similarities, career_item_details)):
+                ranked_results.append({
+                    'career_item': detail['career_item'],
+                    'relevance_score': float(similarity_score),
+                    'type': detail['type'],
+                    'title': detail['career_item'].title,
+                    'description': detail['career_item'].description or '',
+                    'institution': detail['career_item'].institution or 'Independiente',
+                    'start_date': detail['career_item'].start_date,
+                    'end_date': detail['career_item'].end_date,
+                    'processed_text': detail['text'],
+                    'title_tokens': detail['title_tokens'],
+                    'desc_tokens': detail['desc_tokens']
+                })
+            
+            ranked_results.sort(key=lambda x: x['relevance_score'], reverse=True)
+            
+            ranked_career_items = [result['career_item'] for result in ranked_results]
+            relevance_scores = [result['relevance_score'] for result in ranked_results]
+            
+            self.career_items_results = {
+                'ranked_career_items': ranked_career_items,
+                'relevance_scores': relevance_scores,
+                'details': ranked_results
+            }
+            
+        except Exception as e:
+            self.career_items_results = {
+                'ranked_career_items': [detail['career_item'] for detail in career_item_details],
+                'relevance_scores': [0.5] * len(career_item_details),  # Default medium score
+                'details': [{
+                    'career_item': detail['career_item'],
+                    'relevance_score': 0.5,
+                    'type': detail['type'],
+                    'title': detail['career_item'].title,
+                    'description': detail['career_item'].description or '',
+                    'institution': detail['career_item'].institution or 'Independiente',
+                    'start_date': detail['career_item'].start_date,
+                    'end_date': detail['career_item'].end_date,
+                    'processed_text': detail['text'],
+                    'title_tokens': detail['title_tokens'],
+                    'desc_tokens': detail['desc_tokens']
+                } for detail in career_item_details]
+            }
         
-    #     similarities = cosine_similarity([job_embedding], career_embeddings)[0]
-        
-    #     ranked_results = []
-    #     for i, (similarity_score, detail) in enumerate(zip(similarities, career_item_details)):
-    #         ranked_results.append({
-    #             'career_item': detail['career_item'],
-    #             'relevance_score': float(similarity_score),
-    #             'type': detail['type'],
-    #             'title': detail['career_item'].title,
-    #             'description': detail['career_item'].description,
-    #             'institution': detail['career_item'].institution,
-    #             'start_date': detail['career_item'].start_date,
-    #             'end_date': detail['career_item'].end_date,
-    #             'processed_text': detail['text'],
-    #             'title_tokens': detail['title_tokens'],
-    #             'desc_tokens': detail['desc_tokens']
-    #         })
-    #     ranked_results.sort(key=lambda x: x['relevance_score'], reverse=True)
-        
-    #     ranked_career_items = [result['career_item'] for result in ranked_results]
-    #     relevance_scores = [result['relevance_score'] for result in ranked_results]
-    #     self.career_items_results = {
-    #         'ranked_career_items': ranked_career_items,
-    #         'relevance_scores': relevance_scores,
-    #         'details': ranked_results
-    #     }
-        
-    #     return self.career_items_results
+        return self.career_items_results
 
     def score_match(self):
         ''' Returns a score based on the match between user profile and job offer '''
-        # Adjusted weights --> career items are disabled
-        TECH = 0.70     # Increased from 0.50
+        TECH = 0.50     
         KEYWORDS = 0.30  
-        # CAREER = 0.20   # Disabled
+        CAREER = 0.20   
         
         tech_score = getattr(self, 'technology_match_results', {}).get('match_score', 0.0)
         keywords_score = getattr(self, 'keyword_match_results', {}).get('match_score', 0.0)
         
-        # Career scoring disabled
-        # career_results = getattr(self, 'career_items_results', {})
-        # career_scores = career_results.get('relevance_scores', [])
-        # if career_scores:
-        #     top_career_scores = sorted(career_scores, reverse=True)[:3]
-        #     career_score = sum(score * 100 for score in top_career_scores) / len(top_career_scores)
-        # else:
-        #     career_score = 0.0
+        career_results = getattr(self, 'career_items_results', {})
+        career_scores = career_results.get('relevance_scores', [])
+        if career_scores:
+            top_career_scores = sorted(career_scores, reverse=True)[:3]
+            career_score = sum(score * 100 for score in top_career_scores) / len(top_career_scores)
+        else:
+            career_score = 0.0
         
         final_score = (
             tech_score * TECH +
-            keywords_score * KEYWORDS
-            # + career_score * CAREER  # Disabled
+            keywords_score * KEYWORDS +
+            career_score * CAREER 
         )
         final_score = max(0.0, min(100.0, final_score))
 
@@ -312,5 +335,5 @@ class MatcherService:
         ''' Main method to execute the matching process '''
         self.match_technologies()
         self.match_keywords()
-        # self.related_career_items() # Disabled
+        self.related_career_items()  
         return self.score_match()
