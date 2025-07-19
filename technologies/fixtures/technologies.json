@@ -495,5 +495,166 @@
   "fields": {
     "name": "flask"
   }
+},
+{
+  "model": "technologies.technology",
+  "pk": 74,
+  "fields": {
+    "name": "nodejs"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 75,
+  "fields": {
+    "name": "nginx"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 76,
+  "fields": {
+    "name": "power bi"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 77,
+  "fields": {
+    "name": "excel"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 78,
+  "fields": {
+    "name": "abap"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 79,
+  "fields": {
+    "name": "ada"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 80,
+  "fields": {
+    "name": "ajax"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 81,
+  "fields": {
+    "name": "asp.net"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 82,
+  "fields": {
+    "name": "babel"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 83,
+  "fields": {
+    "name": "blockchain"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 84,
+  "fields": {
+    "name": "elixir"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 86,
+  "fields": {
+    "name": "github"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 87,
+  "fields": {
+    "name": "jquery"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 88,
+  "fields": {
+    "name": "kubernetes"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 89,
+  "fields": {
+    "name": "jupyter"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 90,
+  "fields": {
+    "name": "laravel"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 91,
+  "fields": {
+    "name": "maven"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 92,
+  "fields": {
+    "name": "graphql"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 93,
+  "fields": {
+    "name": "redux"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 94,
+  "fields": {
+    "name": "rest api"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 95,
+  "fields": {
+    "name": "unity"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 96,
+  "fields": {
+    "name": "unreal engine"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 97,
+  "fields": {
+    "name": "yaml"
+  }
 }
 ]
