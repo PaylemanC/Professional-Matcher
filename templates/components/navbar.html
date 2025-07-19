@@ -1,17 +1,18 @@
 <nav>
-    <ul>
+    <a href="{% url 'home' %}" class="navbar__brand">Professional Matcher</a>
+    <ul class="navbar__list">
         {% if user.is_authenticated %}
-            <li>
+            <li class="navbar__item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <a href="{% url 'home' %}">Inicio</a>
-                    <a href="{% url 'profile' %}">Perfil</a>
+                    <a href="{% url 'profile' %}">Tu Perfil</a>
                     <button type="submit">Cerrar sesión</button>
                 </form>
             </li>
         {% else %}
-            <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
-            <li><a href="{% url 'register' %}">Registrarse</a></li>
+            <li class="navbar__item"><a href="{% url 'login' %}">Iniciar sesión</a></li>
+            <li class="navbar__item"><a href="{% url 'register' %}">Registrarse</a></li>
         {% endif %}
     </ul>
 </nav>

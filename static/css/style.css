@@ -25,6 +25,7 @@ body {
   font-size: 1.6rem;
   color: var(--text-color);
   background-color: var(--background-color);
+  position: relative;
 }
 
 input, button, textarea, select {
@@ -39,8 +40,57 @@ ul {
   list-style: none;
 }
 
-/* ------------------- GENERAL STYLES ------------------- */
+/* ------------------- NAVBAR ------------------- */
 
-h1 {
-  color: var(--primary-color);
-} 
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--soft-primary-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar__brand {
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: none;
+}
+
+.navbar__list {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.navbar__list a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar__list a:hover {
+  color: var(--secondary-color);
+}
+
+/* ------------------- FOOTER ------------------- */
+footer {
+  padding: 32px;
+  background-color: var(--softer-primary-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.footer__list:not(.developer) {
+  max-width: 360px;
+}
+
+.footer__developer-name {
+  font-weight: bold;
+}

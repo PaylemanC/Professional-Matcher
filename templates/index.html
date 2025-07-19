@@ -1,7 +1,21 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %} 
+{% block styles %} <link rel="stylesheet" href="{% static 'css/index.css' %}"> {% endblock styles %}
 
 {% block content %}
-    <h1>Professional Matcher</h1>
-    <p>Analiza ofertas laborales y descubre qué tan compatible eres con ellas.</p>
+<section>
+    <div class="hero">        
+        <h1 class="main__title">Professional Matcher</h1>
+        <p class="main__subtitle">Analiza ofertas laborales IT y descubre qué tan compatible eres con ellas.</p>
+        {% comment %} <img src="" alt=""> {% endcomment %}
+    </div>
+    <div class="instructions--container">
+       <div class="instruction__card">
+            <div class="image"></div>
+            {% comment %} <img src="{% static 'images/icons/' %}" alt=""> {% endcomment %}
+            <p>Regístrate</p>
+            
+       </div>
+    </div>
+</section>
 {% endblock content %}
