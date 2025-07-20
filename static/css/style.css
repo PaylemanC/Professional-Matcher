@@ -95,6 +95,8 @@ footer {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 32px;
+  position: relative;
+  z-index: 50;
 }
 
 .footer__list:not(.developer) {
