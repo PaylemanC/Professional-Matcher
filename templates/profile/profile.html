@@ -7,62 +7,56 @@
 
 {% block content %}
 <a href="{% url 'home' %}">Regresar</a>
-<div class="profile--container">
+<div class="profile">
     <section class="user__data">
         <p>{{ user.username }} - {{user.email}}</p> 
     </section>
     <section class="user__profile">
-        <h2>Tu Perfil Profesional</h2>
+        <h2>{% if profile.area %} {{ profile.area }} {% else %} Tu Perfil Profesional {% endif %}</h2>
         {% if profile %}
-        <div class="profile__data">
+        <div class="profile__data--container">
             <p class="profile__last-update">Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
             <a href="{% url 'profile_update' %}" class="profile__edit">Editar perfil profesional</a>  
-            <div class="profile__bio--container profile__container">
-                <p class="profile__label">Biografía</p>
-                {% if profile.bio %}
-                    <p>{{ profile.bio }}</p>
-                {% else %}
-                    <p>No tienes una biografía todavía.</p>
-                {% endif %}
-            </div>  
-            <div class="profile__area--container profile__container">
-                <p class="profile__label">Área</p> 
-                {% if profile.area %}
-                    <p>{{ profile.area }}</p>
-                {% else %}
-                    <p>No tienes un área definida todavía.</p>
-                {% endif %}
-            </div>
-            <div class="profile__technologies--container profile__container">
-                <p class="profile__label">Tecnologías</p>
-                {% if profile.technologies.exists %}
-                    <p>
-                        {% for tech in profile.technologies.all %}
-                            {{ tech.name }}
-                            {% if not forloop.last %}, {% endif %}
+            <div class="profile__data">
+                <div class="profile__bio--container profile__container">
+                    <p class="profile__label">Biografía</p>
+                    {% if profile.bio %}
+                        <p>{{ profile.bio }}</p>
+                    {% else %}
+                        <p>No tienes una biografía todavía.</p>
+                    {% endif %}
+                </div>  
+                <div class="profile__technologies--container profile__container">
+                    <p class="profile__label">Tecnologías</p>
+                    {% if profile.technologies.exists %}
+                        <p class="profile__technology">
+                            {% for tech in profile.technologies.all %}
+                                {{ tech.name }}
+                                {% if not forloop.last %}- {% endif %}
+                            {% endfor %}
+                        </p>
+                    {% else %}
+                        <p>No tienes ninguna tecnología todavía.</p>
+                    {% endif %}
+                </div>
+                <div class="profile__career-items--container profile__container">
+                    <p class="profile__label">Experiencia</p>
+                    <a href="{% url 'career_item_create' 'experience' %}">Añadir experiencia laboral</a>
+                    {% if profile.career_items.exists %}
+                        {% for item in profile.career_items.all %}
+                            {% include "components/career-item.html" with item=item type='experience' %}
                         {% endfor %}
-                    </p>
-                {% else %}
-                    <p>No tienes ninguna tecnología todavía.</p>
-                {% endif %}
-            </div>
-            <div class="profile__career-items--container profile__container">
-                <p class="profile__label">Experiencia</p>
-                <a href="{% url 'career_item_create' 'experience' %}">Añadir experiencia laboral</a>
-                {% if profile.career_items.exists %}
-                    {% for item in profile.career_items.all %}
-                        {% include "components/career-item.html" with item=item type='experience' %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="profile__career-items--container profile__container">
-                <p class="profile__label">Educación</p>
-                <a href="{% url 'career_item_create' 'education' %}">Añadir educación</a>
-                {% if profile.career_items.exists %}
-                    {% for item in profile.career_items.all %}
-                        {% include "components/career-item.html" with item=item type='education' %}
-                    {% endfor %}
-                {% endif %}
+                    {% endif %}
+                </div>
+                <div class="profile__career-items--container profile__container">
+                    <p class="profile__label">Educación</p>
+                    <a href="{% url 'career_item_create' 'education' %}">Añadir educación</a>
+                    {% if profile.career_items.exists %}
+                        {% for item in profile.career_items.all %}
+                            {% include "components/career-item.html" with item=item type='education' %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% else %}
