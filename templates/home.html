@@ -8,14 +8,17 @@
     <section class="main-section">
         <div class="main-section__content">
             <h2 class="main-section__welcome">Bienvenid@, <span>{{ user.username }}</span>!</h2>
-            <form method="post">
+            <p class="main-section__form-label">Ingresa aquí tu oferta laboral</p>
+            <form method="post" class="main-section__form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit">Analizar</button>
+                {% if not user.profile %}
+                    <p class="main-section__form-warning">*Recuerda que debes tener un <a href="{% url 'profile_create' %}">perfil profesional</a> creado antes de comparar.</p>
+                {% endif %}
+                <div class="main-section__form-button--container">
+                    <button type="submit" class="main-section__form-button"><span>Analizar</span></button>
+                </div>
             </form>
-            {% if not user.profile %}
-                <p>*¡Recuerda que debes tener un perfil profesional creado para empezar a comparar!</p>
-            {% endif %}
         </div>
         <div class="main-section__decor--container">
             <div class="main-section__decor"></div>
