@@ -7,7 +7,7 @@
             <li class="navbar__item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="navbar__item">Cerrar sesión</button>
+                    <button type="submit" class="navbar__item navbar__item--logout">Cerrar sesión</button>
                 </form>
             </li>
         </ul>

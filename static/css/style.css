@@ -51,6 +51,8 @@ nav {
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 4px solid var(--secondary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar__brand {
@@ -65,17 +67,24 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
-.navbar__list a {
+.navbar__item a {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
 
-.navbar__list a:hover {
+.navbar__item a:hover, .navbar__item--logout:hover {
   color: var(--secondary-color);
+}
+
+.navbar__item--logout {
+  font-style: italic;
+  color: white;
+  background-color: transparent;
+  border: none;
 }
 
 /* ------------------- FOOTER ------------------- */
