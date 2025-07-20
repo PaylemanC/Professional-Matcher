@@ -9,13 +9,13 @@ from django.views.generic.edit import UpdateView, FormView, DeleteView
 def profile_detail(request):
     profile = getattr(request.user, 'profile', None)
     
-    return render(request, 'profile.html', {'profile': profile})
+    return render(request, 'profile/profile.html', {'profile': profile})
 
 
 class ProfileCreateView(FormView):
     model = ProfessionalProfile
     form_class = ProfessionalProfileForm
-    template_name = 'profile-create.html'
+    template_name = 'profile/profile-create.html'
     success_url = '/profile'
     
     def form_valid(self, form):
@@ -29,7 +29,7 @@ class ProfileCreateView(FormView):
 class ProfileUpdateView(UpdateView):
     model = ProfessionalProfile
     form_class = ProfessionalProfileForm
-    template_name = 'profile-edit.html'
+    template_name = 'profile/profile-edit.html'
     success_url = '/profile'
 
     def get_object(self):
@@ -56,7 +56,7 @@ class CareerItemBaseView(View):
 
 class CareerItemCreateView(CareerItemBaseView, FormView):
     form_class = CareerItemForm
-    template_name = 'career-item-create.html'
+    template_name = 'profile/career-item-create.html'
     
     def form_valid(self, form):
         career_item = form.save(commit=False)
@@ -69,13 +69,13 @@ class CareerItemCreateView(CareerItemBaseView, FormView):
 class CareerItemUpdateView(CareerItemBaseView, UpdateView):
     model = CareerItem
     form_class = CareerItemForm
-    template_name = 'career-item-edit.html'
+    template_name = 'profile/career-item-edit.html'
     context_object_name = 'career_item'
     success_url = '/profile'
 
 
 class CareerItemDeleteView(CareerItemBaseView, DeleteView):
     model = CareerItem
-    template_name = 'career-item-delete.html'
+    template_name = 'profile/career-item-delete.html'
     context_object_name = 'career_item'
     success_url = '/profile'
