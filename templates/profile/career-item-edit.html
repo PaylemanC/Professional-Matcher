@@ -2,10 +2,15 @@
 {% load static %} 
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar</button>
-    </form>
-    <a href="{% url 'home' %}">Volver</a>
+    <a href="{% url 'profile' %}">Regresar</a>
+    <section id="form-section">
+        <h2>Editar</h2>
+        <form method="post" class="profile-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form__button--container">
+                <button type="submit" class="form-button secondary-button"><span>Guardar</span></button>
+            </div>
+        </form>
+    </section>
 {% endblock %}

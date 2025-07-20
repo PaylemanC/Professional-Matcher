@@ -14,12 +14,12 @@ class ProfessionalProfileForm(forms.ModelForm):
         widgets = {
             'area': forms.TextInput(attrs={
                 'placeholder': 'Ej. Desarrollador Full Stack, Data Engineer, DevOps Specialist',
-                'class': ''
+                'class': 'profile-form__area form-input'
             }),
             'bio': forms.Textarea(attrs={
                 'rows': 4, 
                 'placeholder': 'Cuéntanos de ti...',
-                'class': ''
+                'class': 'profile-form__bio form-input'
             }),
             'technologies': TechnologySelectWidget,
         }
@@ -32,12 +32,16 @@ class ProfessionalProfileForm(forms.ModelForm):
 class CareerItemForm(forms.ModelForm):
     class Meta:
         model = CareerItem
-        fields = ['title', 'description', 'institution', 'start_date', 'end_date']
+        fields = ['title', 'institution', 'description', 'start_date', 'end_date']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': ''
             }),
             'institution': forms.TextInput(attrs={
+                'class': ''
+            }),
+            'description': forms.Textarea(attrs={
+                'rows': 4,
                 'class': ''
             }),
             'start_date': forms.DateInput(attrs={
@@ -46,10 +50,6 @@ class CareerItemForm(forms.ModelForm):
             }),
             'end_date': forms.DateInput(attrs={
                 'type': 'date',
-                'class': ''
-            }),
-            'description': forms.Textarea(attrs={
-                'rows': 4,
                 'class': ''
             }),
         }
