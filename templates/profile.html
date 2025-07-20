@@ -12,7 +12,9 @@
 
 <section>
     <h3>Perfil Profesional</h3>
-    {% if profile %}    
+    {% if profile %}
+        <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
+        <a href="{% url 'profile_update' %}">Editar perfil profesional</a>    
         <p>Biografía:</p>
         {% if profile.bio %}
             <p>{{ profile.bio }}</p>
@@ -54,9 +56,6 @@
                 {% include "components/career-item.html" with item=item type='experience' %}
             {% endfor %}
         {% endif %}
-
-        <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
-        <a href="{% url 'profile_update' %}">Editar perfil profesional</a>
     {% else %}
         <p>Aún no has cargado tu perfil profesional.</p>
         <a href="{% url 'profile_create' %}">Crea tu perfil profesional</a>

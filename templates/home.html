@@ -15,8 +15,8 @@
                 {% if not user.profile %}
                     <p class="main-section__form-warning">*Recuerda que debes tener un <a href="{% url 'profile_create' %}">perfil profesional</a> creado antes de comparar.</p>
                 {% endif %}
-                <div class="main-section__form-button--container">
-                    <button type="submit" class="main-section__form-button"><span>Analizar</span></button>
+                <div class="form__button--container">
+                    <button type="submit" class="main-section__form-button form-button main-button"><span>Analizar</span></button>
                 </div>
             </form>
         </div>
