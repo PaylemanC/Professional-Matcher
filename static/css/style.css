@@ -28,6 +28,10 @@ body {
   position: relative;
 }
 
+main {
+  min-height: calc(100vh - 67px - 123px); 
+}
+
 input, button, textarea, select {
   font: inherit;
 }
@@ -43,6 +47,7 @@ ul {
 /* ------------------- NAVBAR ------------------- */
 
 nav {
+  min-height: 67px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,6 +94,7 @@ nav {
 
 /* ------------------- FOOTER ------------------- */
 footer {
+  min-height: 123px;
   padding: 32px;
   background-color: var(--softer-primary-color);
   display: flex;
