@@ -53,5 +53,5 @@ form {
 .main-section__form-warning {
     font-size: 1.5rem;
     font-style: italic;
-    color: rgba(22, 22, 22, 0.8);
+    color: var(--soft-text-color);
 }
