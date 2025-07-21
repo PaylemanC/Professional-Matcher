@@ -15,8 +15,13 @@ def profile_detail(request):
 class ProfileCreateView(FormView):
     model = ProfessionalProfile
     form_class = ProfessionalProfileForm
-    template_name = 'profile/profile-create.html'
+    template_name = 'profile/profile-form.html'
     success_url = '/profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mode'] = 'create'
+        return context
     
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -30,9 +35,14 @@ class ProfileCreateView(FormView):
 class ProfileUpdateView(UpdateView):
     model = ProfessionalProfile
     form_class = ProfessionalProfileForm
-    template_name = 'profile/profile-edit.html'
+    template_name = 'profile/profile-form.html'
     success_url = '/profile'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mode'] = 'update'
+        return context
+    
     def get_object(self):
         return self.request.user.profile
 

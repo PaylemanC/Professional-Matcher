@@ -5,9 +5,13 @@
 {% endblock styles %}
 
 {% block content %}
-<a href="{% url 'home' %}">Regresar</a>
+{% if mode == "create" %}
+    <a href="{% url 'home' %}">Regresar</a>
+{% else %}
+    <a href="{% url 'profile' %}">Regresar</a>
+{% endif %}
 <section id="form-section" class="profile-form-section">
-    <h2>Crea tu perfil profesional</h2>
+    <h2>{% if mode == "create" %}Crea tu perfil profesional{% else %}Mi perfil profesional{% endif %}</h2>
     <form method="post" class="profile-form">
         {% csrf_token %}
         <div class="form__input--container">
@@ -26,7 +30,7 @@
             {{ form.technologies.errors }}
         </div>
         <div class="form__button--container">
-            <button type="submit" class="form-button secondary-button"><span>Crear perfil</span></button>
+            <button type="submit" class="form-button secondary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Editar perfil{% endif %}</span></button>
         </div>
     </form>
 </section>
