@@ -1,19 +1,21 @@
 {% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/report.css' %}">
+{% endblock styles %}
 
 {% if match_results %}
-    <div id="match-report">
+<div id="match-report">
         <!-- Puntuación General -->
-        <div class="overall-score">
-            <h3>Puntuación General: {{ match_results.overall_score }}%</h3>
+        <div id="overall-score">
+            <h3 class="overall-score__value">{{ match_results.overall_score }}%</h3>
             {% if match_results.overall_score >= 70 %}
-                <p class="score-message success">¡Excelente compatibilidad!</p>
+                <p class="overall-score__message success">¡Excelente compatibilidad!</p>
             {% elif match_results.overall_score >= 50 %}
-                <p class="score-message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
+                <p class="overall-score__message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
             {% else %}
-                <p class="score-message info">Hay oportunidades para mejorar tu perfil.</p>
+                <p class="overall-score__message info">Hay oportunidades para mejorar tu perfil.</p>
             {% endif %}
         </div>
-    </div>
     <!-- Tecnologías -->
     <div class="technologies">
         <h3>Tecnologías ({{ match_results.technology_match.match_score|floatformat:1 }}%)</h3>
@@ -130,12 +132,5 @@
             </ul>
         {% endif %}
     </div>
-
-{% endif %}
-
-    <!-- Oferta Laboral Analizada -->
-    <div>
-        <h3>Oferta Laboral Analizada</h3>
-        <p>{{ match_results.job_offer|truncatewords:50 }}</p>
-    </div>
 </div>
+{% endif %}
