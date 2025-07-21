@@ -7,8 +7,8 @@
     <section class="authentication">
         <div class="authentication-form--container">
             <div>
-                <h2>Iniciar sesión</h2>
-                <form method="post">
+                <h2 class="authentication-form__title">Inicia sesión</h2>
+                <form method="post" class="authentication-form">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit">Iniciar sesión</button>
