@@ -2,10 +2,48 @@ from profiles.models import ProfessionalProfile, CareerItem
 from technologies.models import Technology
 from django import forms
 from django_select2 import forms as s2forms
+from datetime import date
 
 class TechnologySelectWidget(s2forms.ModelSelect2MultipleWidget):
     model = Technology
     search_fields = ['name__istartswith']
+
+class MonthYearWidget(forms.MultiWidget):
+    def __init__(self, attrs=None):
+        months = [
+            ('', '--- Mes ---'),
+            ('01', 'Enero'), ('02', 'Febrero'), ('03', 'Marzo'), ('04', 'Abril'),
+            ('05', 'Mayo'), ('06', 'Junio'), ('07', 'Julio'), ('08', 'Agosto'),
+            ('09', 'Septiembre'), ('10', 'Octubre'), ('11', 'Noviembre'), ('12', 'Diciembre')
+        ]        
+        current_year = date.today().year
+        years = [('', '--- Año ---')] + [(str(year), str(year)) for year in range(1940, current_year + 1)]
+        years.reverse()        
+        widgets = [
+            forms.Select(choices=months, attrs={'class': 'month-select'}),
+            forms.Select(choices=years, attrs={'class': 'year-select'}),
+        ] 
+        
+        super().__init__(widgets, attrs)
+
+    # para render form
+    def decompress(self, value):
+        if value:
+            return [value.strftime('%m'), value.strftime('%Y')]
+        return [None, None]
+
+    # para DB
+    def value_from_datadict(self, data, files, name):
+        month, year = super().value_from_datadict(data, files, name)
+        if month and year:
+            try:
+                return date(int(year), int(month), 1)
+            except ValueError:
+                return None
+        return None
+        
+    def format_output(self, rendered_widgets):
+        return '<div class="month-year-widgets">{}</div>'.format(''.join(rendered_widgets))
 
 class ProfessionalProfileForm(forms.ModelForm):
     class Meta:
@@ -44,19 +82,13 @@ class CareerItemForm(forms.ModelForm):
                 'rows': 4,
                 'class': ''
             }),
-            'start_date': forms.DateInput(attrs={
-                'type': 'date',
-                'class': ''
-            }),
-            'end_date': forms.DateInput(attrs={
-                'type': 'date',
-                'class': ''
-            }),
+            'start_date': MonthYearWidget(),
+            'end_date': MonthYearWidget(),
         }
         labels = {
             'title': 'Título',
-            'description': 'Descripción de tus responsabilidades y logros',
             'institution': 'Nombre de la empresa o institución',
+            'description': 'Descripción de tus responsabilidades y logros',
             'start_date': 'Fecha de inicio',
             'end_date': 'Fecha de finalización (dejar en blanco si es actual)',
         }
