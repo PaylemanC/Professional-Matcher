@@ -5,3 +5,47 @@
 }
 
 /* ------------------- OVERALL SCORE ------------------- */
+
+#overall-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overall-score__circle-progress {
+    --size: 116px;
+    --thickness: 16px;
+    --value: 90; 
+    --progress-color: var(--soft-primary-color); 
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--progress-color) calc(var(--value) * 1%),
+        #e0e0e0 0
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.circle-progress__inner {
+    width: calc(var(--size) - var(--thickness) * 2);
+    height: calc(var(--size) - var(--thickness) * 2);
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overall-score__value {
+    font-weight: bold;
+}
+
+.overall-score__message {
+    font-style: italic;
+    text-align: center;
+    margin-top: 10px;
+}

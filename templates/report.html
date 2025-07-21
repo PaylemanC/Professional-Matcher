@@ -7,13 +7,17 @@
 <div id="match-report">
         <!-- Puntuación General -->
         <div id="overall-score">
-            <h3 class="overall-score__value">{{ match_results.overall_score }}%</h3>
+            <div class="overall-score__circle-progress" style="--value: {{ match_results.overall_score }};">
+                <div class="circle-progress__inner">
+                    <p class="overall-score__value">{{ match_results.overall_score }}%</p>
+                </div>
+            </div>
             {% if match_results.overall_score >= 70 %}
-                <p class="overall-score__message success">¡Excelente compatibilidad!</p>
+                <p class="overall-score__message">¡Excelente compatibilidad!</p>
             {% elif match_results.overall_score >= 50 %}
-                <p class="overall-score__message warning">Buena compatibilidad, pero hay áreas de mejora.</p>
+                <p class="overall-score__message">Buena compatibilidad, pero hay áreas de mejora.</p>
             {% else %}
-                <p class="overall-score__message info">Hay oportunidades para mejorar tu perfil.</p>
+                <p class="overall-score__message">Hay oportunidades para mejorar tu perfil.</p>
             {% endif %}
         </div>
     <!-- Tecnologías -->
