@@ -2,6 +2,7 @@
 {% load static %} 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loader.css' %}">
 {% endblock styles %}
 
 {% block content %}
@@ -9,21 +10,24 @@
         <div class="main-section__content">
             <h2 class="main-section__welcome">Bienvenid@, <span>{{ user.username }}</span>!</h2>
             <p class="main-section__form-label">Ingresa aquí tu oferta laboral</p>
-            <form method="post" class="main-section__form">
+            <form method="post" class="main-section__form" id="matchingForm">
                 {% csrf_token %}
                 {{ form.as_p }}
                 {% if not user.profile %}
                     <p class="main-section__form-warning">*Recuerda que debes tener un <a href="{% url 'profile_create' %}">perfil profesional</a> creado antes de comparar.</p>
                 {% endif %}
                 <div class="form__button--container">
-                    <button type="submit" class="main-section__form-button form-button main-button"><span>Analizar</span></button>
+                    <button type="submit" class="main-section__form-button form-button main-button" id="matchingBtn"><span>Analizar</span></button>
                 </div>
             </form>
         </div>
         <div class="main-section__decor--container">
             <div class="main-section__decor"></div>
         </div>
-    </section>
+    </section>    
+    <div id="loadingOverlay" style="display: none;">
+        {% include "components/loader.html" %}
+    </div>    
     {% if match_results %}
         {% include "report.html" with match_results=match_results %}
     {% endif %}
