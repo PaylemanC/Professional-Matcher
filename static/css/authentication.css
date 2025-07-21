@@ -1,0 +1,22 @@
+.authentication {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 67px - 123px);
+}
+
+.authentication-form--container {
+    /* width: 100%;
+    max-width: 400px; */
+    padding: 4px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--soft-primary-color));
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.authentication-form--container div {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+}

@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
+{% endblock styles %}
 {% block content %}
-    <h2>Iniciar sesión</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Iniciar sesión</button>
-    </form>
-    <a href="{% url 'register' %}">Regístrate aquí</a>
+    <section class="authentication">
+        <div class="authentication-form--container">
+            <div>
+                <h2>Iniciar sesión</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+                <a href="{% url 'register' %}">Regístrate aquí</a>
+            </div>
+        </div>
+    </section>
 {% endblock %}
