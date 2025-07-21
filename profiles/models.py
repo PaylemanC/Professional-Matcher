@@ -1,5 +1,7 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from technologies.models import Technology
 
 class ProfessionalProfile(models.Model):
@@ -12,6 +14,19 @@ class ProfessionalProfile(models.Model):
 
     def __str__(self):
         return f"{self.fk_user.username}'s Profile"
+    
+    def clean(self):
+        errors = {}
+        
+        if not self.area or self.area.strip() == "" or self.area is None:
+            errors['area'] = "*Campo obligatorio."
+        elif len(self.area) > 100:
+            errors['area'] = "*Máximo 100 caracteres."
+        if self.bio and len(self.bio) > 500:
+            errors['bio'] = "*Máximo 500 caracteres."
+
+        if errors:
+            raise ValidationError(errors)
 
 class CareerItem(models.Model):
     fk_profile = models.ForeignKey(ProfessionalProfile, related_name='career_items', on_delete=models.CASCADE)
@@ -22,10 +37,10 @@ class CareerItem(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
+    def __str__(self):
+        return f"({self.fk_profile.fk_user}) {self.title} at {self.institution} ({self.start_date} - {self.end_date})"    
+    
     def get_end_date_display(self):
         if self.end_date:
             return self.end_date.strftime("%B %Y")
         return "Actualidad"
-
-    def __str__(self):
-        return f"({self.fk_profile.fk_user}) {self.title} at {self.institution} ({self.start_date} - {self.end_date})"

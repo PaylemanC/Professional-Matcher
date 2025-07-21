@@ -21,6 +21,7 @@ class ProfileCreateView(FormView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         profile.fk_user = self.request.user
+        profile.full_clean()
         profile.save()
         form.save_m2m() 
         return redirect('profile')

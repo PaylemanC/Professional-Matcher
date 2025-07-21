@@ -10,7 +10,21 @@
         <h2>Mi perfil profesional</h2>
         <form method="post" class="profile-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="form__input--container">
+                {{ form.area.label_tag }}
+                {{ form.area }}
+                {{ form.area.errors }} 
+            </div>
+            <div class="form__input--container">
+                {{ form.bio.label_tag }}
+                {{ form.bio }}
+                {{ form.bio.errors }}
+            </div>
+            <div class="form__input--container">
+                {{ form.technologies.label_tag }}
+                {{ form.technologies }}
+                {{ form.technologies.errors }}
+            </div>
             <div class="form__button--container">
                 <button type="submit" class="form-button secondary-button"><span>Editar perfil</span></button>
             </div>
