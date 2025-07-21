@@ -14,6 +14,7 @@ class EnsureProfileOnPostMiddleware:
         self.excluded_paths = [
             reverse("logout"),
             reverse("login"),
+            reverse("profile_create")
         ]
 
     def __call__(self, request):
