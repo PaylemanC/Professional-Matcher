@@ -656,5 +656,68 @@
   "fields": {
     "name": "yaml"
   }
+},
+{
+  "model": "technologies.technology",
+  "pk": 99,
+  "fields": {
+    "name": "nestjs"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 100,
+  "fields": {
+    "name": "symfony"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 101,
+  "fields": {
+    "name": "jwt"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 102,
+  "fields": {
+    "name": "google cloud"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 103,
+  "fields": {
+    "name": "apache"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 104,
+  "fields": {
+    "name": "jasmine"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 105,
+  "fields": {
+    "name": "mocha"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 106,
+  "fields": {
+    "name": "selenium"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 108,
+  "fields": {
+    "name": "jenkins"
+  }
 }
 ]
