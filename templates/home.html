@@ -8,13 +8,18 @@
 {% block content %}
     <section class="main-section">
         <div class="main-section__content">
-            <h2 class="main-section__welcome">Bienvenid@, <span>{{ user.username }}</span>!</h2>
+            <h2 class="main-section__welcome">
+                Bienvenid@, <span class="main-section__welcome-username">{{ user.username }}</span>!
+                {% if user.profile %}
+                    <p class="main-section__user-area">{{ user.profile.area }}</p>
+                {% endif %}
+            </h2>
             <p class="main-section__form-label">Ingresa aquí tu oferta laboral</p>
             <form method="post" class="main-section__form" id="matchingForm">
                 {% csrf_token %}
                 {{ form.as_p }}
                 {% if not user.profile %}
-                    <p class="main-section__form-warning">*Recuerda que debes tener un <a href="{% url 'profile_create' %}">perfil profesional</a> creado antes de comparar.</p>
+                    <span class="main-section__form-warning">*Recuerda que debes tener un <a href="{% url 'profile_create' %}">perfil profesional</a> creado antes de comparar.</span>
                 {% endif %}
                 <div class="form__button--container">
                     <button type="submit" class="main-section__form-button form-button main-button" id="matchingBtn"><span>Analizar</span></button>

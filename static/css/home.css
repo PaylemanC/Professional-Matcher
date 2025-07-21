@@ -13,7 +13,20 @@
 .main-section__welcome {
     font-size: 2.8rem;
     color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.main-section__welcome-username {
+    color: var(--soft-primary-color);
+    font-size: 3rem;
+}
+
+.main-section__user-area {
+    font-size: 2rem;
+    color: var(--soft-text-color);
     margin-bottom: 16px;
+    font-style: italic;
+    font-weight: normal;
 }
 
 .main-section__decor--container {
@@ -27,20 +40,25 @@
     background: url('../images/home-background.png') center/cover no-repeat;
 }
 
-.main-section__form-label {
-    font-size: 1.8rem;
+#matchingForm p {
+    display: flex;
+    width: 100%;
+    padding: 6px;
+    border-radius: 8px;
+    /* background-image: linear-gradient(144deg, var(--soft-primary-color),  var(--primary-color) 50%, var(--soft-primary-color)); */
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--soft-primary-color));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 8px 0;
 }
 
-form {
-    margin: 8px 0;
+.main-section__form-label {
+    font-size: 1.8rem;
 }
 
 #id_job_offer {
     padding: 8px;
     width: 100%;
-    border: 2px solid var(--softer-primary-color);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     height: 55vh;
     resize: vertical;
 }
