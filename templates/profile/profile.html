@@ -43,18 +43,22 @@
                     <p class="profile__label">Experiencia</p>
                     <a href="{% url 'career_item_create' 'experience' %}">Añadir experiencia laboral</a>
                     {% if profile.career_items.exists %}
+                        <div class="profile__career-items--list">
                         {% for item in profile.career_items.all %}
                             {% include "components/career-item.html" with item=item type='experience' %}
                         {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 <div class="profile__career-items--container profile__container">
                     <p class="profile__label">Educación</p>
                     <a href="{% url 'career_item_create' 'education' %}">Añadir educación</a>
                     {% if profile.career_items.exists %}
+                        <div class="profile__career-items--list">     
                         {% for item in profile.career_items.all %}
                             {% include "components/career-item.html" with item=item type='education' %}
                         {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
             </div>
