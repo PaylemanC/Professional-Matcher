@@ -1,0 +1,11 @@
+<div id="deletePopup" class="popup" style="display: none;">
+  <div class="popup-box">
+    <h3 id="popup-title">¿Eliminar este ítem?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+    <form id="deleteForm" method="POST">
+      {% csrf_token %}
+      <button type="submit">Eliminar</button>
+      <button type="button" onclick="closeDeletePopup()">Cancelar</button>
+    </form>
+  </div>
+</div>

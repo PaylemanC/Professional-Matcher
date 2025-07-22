@@ -59,6 +59,20 @@ window.MatchingFormHandler = {
     }
 };
 
+function openDeletePopup(itemId, itemTitle, itemType) {
+    const popup = document.getElementById('deletePopup');
+    const form = document.getElementById('deleteForm');
+    const title = document.getElementById('popup-title');
+
+    title.textContent = `¿Eliminar "${itemTitle}"?`;
+    form.action = `/profile/${itemType}/delete/${itemId}/`;
+    popup.style.display = 'flex';
+}
+
+function closeDeletePopup() {
+    document.getElementById('deletePopup').style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     LoaderManager.init();
     if (document.getElementById('matchingForm')) {
