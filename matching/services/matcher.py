@@ -71,7 +71,7 @@ class MatcherService:
         
         similarity_matrix = cosine_similarity(user_embeddings, job_embeddings)
         
-        threshold = 0.75    
+        threshold = 0.65  # Reducido para permitir más matches válidos
         match_details = []        
         matched_technologies = []
         matched_job_technologies = []         
@@ -307,20 +307,32 @@ class MatcherService:
 
     def score_match(self):
         ''' Returns a score based on the match between user profile and job offer '''
-        TECH = 0.50     
-        KEYWORDS = 0.30  
-        CAREER = 0.20   
+        TECH = 0.40     
+        KEYWORDS = 0.35  
+        CAREER = 0.25   
         
-        tech_score = getattr(self, 'technology_match_results', {}).get('match_score', 0.0)
+        tech_results = getattr(self, 'technology_match_results', {})
+        tech_matched = len(tech_results.get('matched_technologies', []))
+        tech_missing = len(tech_results.get('missing_technologies', []))
+        tech_user_total = len([tech.name for tech in self.profile.technologies.all()])
+        
+        if tech_user_total > 0 and (tech_matched + tech_missing) > 0:
+            coverage_score = (tech_matched / (tech_matched + tech_missing)) * 100 
+            user_score = (tech_matched / tech_user_total) * 100  
+            tech_score = (coverage_score * 0.7 + user_score * 0.3)  
+        else:
+            tech_score = 0.0
+        
         keywords_score = getattr(self, 'keyword_match_results', {}).get('match_score', 0.0)
         
         career_results = getattr(self, 'career_items_results', {})
         career_scores = career_results.get('relevance_scores', [])
         if career_scores:
             top_career_scores = sorted(career_scores, reverse=True)[:3]
-            career_score = sum(score * 100 for score in top_career_scores) / len(top_career_scores)
+            boosted_scores = [min(100, (score * 100) + 15) for score in top_career_scores]
+            career_score = sum(boosted_scores) / len(boosted_scores)
         else:
-            career_score = 0.0
+            career_score = 20.0
         
         final_score = (
             tech_score * TECH +
