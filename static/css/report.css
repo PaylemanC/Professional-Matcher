@@ -1,7 +1,47 @@
+:root {
+    --matched: #1c8f1f;
+    --mismatched: #cb2727;
+}
+
+/* ------------------- GENERIC ------------------- */
 #match-report {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
+    padding: 16px;
+}
+
+.report-section {
+    display: flex;
+    flex-wrap: wrap;    
+    gap: 16px;
+}
+
+.report-card {
+    padding: 16px;
+    border-radius: 4px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.report-card.matched {
+    border: 1px solid var(--matched);
+}
+
+.report-card.mismatched {
+    border: 1px solid var(--mismatched);
+}
+
+.report-title {
+    color: var(--soft-text-color);
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.report-title span {
+    margin-right: 4px;
 }
 
 /* ------------------- OVERALL SCORE ------------------- */
@@ -48,4 +88,14 @@
     font-style: italic;
     text-align: center;
     margin-top: 10px;
+}
+
+/* ------------------- TECHNOLOGIES ------------------- */
+
+.technologies__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
 }
