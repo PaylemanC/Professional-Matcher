@@ -37,6 +37,10 @@ input, button, textarea, select {
   font: inherit;
 }
 
+textarea {
+  resize: vertical;
+}
+
 button {
   cursor: pointer;
 }
