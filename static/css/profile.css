@@ -18,7 +18,7 @@ p {
 .profile__data {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .profile__label {
@@ -31,4 +31,25 @@ p {
 
 .profile__technology {
     font-weight: bold;
+}
+
+.profile__career-items--list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 8px;
+}
+
+.career-item__card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.career-item__title {
+    font-weight: bold;
+}
+
+.career-item__dates {
+    font-style: italic;
 }
