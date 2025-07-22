@@ -59,15 +59,10 @@ class CareerItemBaseView(View):
     def get_queryset(self):
         return CareerItem.objects.filter(fk_profile=self.request.user.profile, item_type=self.item_type)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['item_type'] = self.item_type
-        return context
-
 
 class CareerItemCreateView(CareerItemBaseView, FormView):
     form_class = CareerItemForm
-    template_name = 'profile/career-item-create.html'
+    template_name = 'profile/career-item-form.html'
     
     def form_valid(self, form):
         career_item = form.save(commit=False)
@@ -75,14 +70,26 @@ class CareerItemCreateView(CareerItemBaseView, FormView):
         career_item.item_type = self.item_type
         career_item.save()
         return redirect('profile')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['item_type'] = self.item_type
+        context['mode'] = 'create'
+        return context
 
 
 class CareerItemUpdateView(CareerItemBaseView, UpdateView):
     model = CareerItem
     form_class = CareerItemForm
-    template_name = 'profile/career-item-edit.html'
+    template_name = 'profile/career-item-form.html'
     context_object_name = 'career_item'
     success_url = '/profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['item_type'] = self.item_type
+        context['mode'] = 'edit'
+        return context
 
 
 class CareerItemDeleteView(CareerItemBaseView, DeleteView):

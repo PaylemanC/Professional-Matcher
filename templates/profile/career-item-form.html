@@ -4,12 +4,16 @@
 {% block content %}
     <a href="{% url 'profile' %}">Regresar</a>
     <section id="form-section">
-        <h2>Añadir {{ item_type }}</h2>
+        <h3>
+            {% if mode == "create" %}Añadir{% else %}Editar{% endif %}
+            {{ item_type }}
+        </h3>
         <form method="post" class="profile-form">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="form__button--container">
-                <button type="submit" class="form-button secondary-button"><span>Crear</span></button>
+                <button type="submit" class="form-button secondary-button"><span>{% if mode == "create" %}Añadir{% else %}Guardar{% endif %}</span></button>
+                <a href="{% url 'profile' %}">Cancelar</a>
             </div>
         </form>
     </section>
