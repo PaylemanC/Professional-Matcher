@@ -329,7 +329,7 @@ class MatcherService:
         )
         final_score = max(0.0, min(100.0, final_score))
 
-        return round(final_score, 1)
+        return round(final_score)
 
     def match(self):
         ''' Main method to execute the matching process '''
