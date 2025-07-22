@@ -4,6 +4,9 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;    
+}
+
+.hero {
   padding: 3.2rem 1.6rem;
 }
 
@@ -19,4 +22,38 @@ section {
 .main__subtitle {
   font-size: 1.8rem;
   text-align: center;
+}
+
+.instructions--container {
+  width: 100%;
+  background-color: var(--soft-primary-color);
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+.instructions-cards--container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--background-color);
+  border-radius: 16px;
+  padding: 32px 16px;
+}
+
+.instruction__card {
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.instruction__card p {
+  text-align: center;
+}
+
+.instruction__card .instruction__title {
+  font-weight: bold;
+  line-height: 2;
 }
