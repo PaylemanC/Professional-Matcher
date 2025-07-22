@@ -17,8 +17,7 @@ class MonthYearWidget(forms.MultiWidget):
             ('09', 'Septiembre'), ('10', 'Octubre'), ('11', 'Noviembre'), ('12', 'Diciembre')
         ]        
         current_year = date.today().year
-        years = [('', '--- Año ---')] + [(str(year), str(year)) for year in range(1940, current_year + 1)]
-        years.reverse()        
+        years = [('', '--- Año ---')] + [(str(year), str(year)) for year in range(current_year, 1939, -1)]
         widgets = [
             forms.Select(choices=months, attrs={'class': 'month-select'}),
             forms.Select(choices=years, attrs={'class': 'year-select'}),

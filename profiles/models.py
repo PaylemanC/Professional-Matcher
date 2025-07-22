@@ -44,3 +44,30 @@ class CareerItem(models.Model):
         if self.end_date:
             return self.end_date.strftime("%B %Y")
         return "Actualidad"
+
+    def clean(self):
+        errors = {}
+
+        if not self.title or self.title.strip() == "" or self.title is None:
+            errors['title'] = "*Campo obligatorio."
+
+        if not self.start_date or self.start_date is None:
+            errors['start_date'] = "*Campo obligatorio."
+
+        if not self.institution or self.institution.strip() == "" or self.institution is None:
+            errors['institution'] = "*Campo obligatorio."
+
+        if self.title and len(self.title) > 200:
+            errors['title'] = "Máximo 200 caracteres."
+
+        if self.institution and len(self.institution) > 200:
+            errors['institution'] = "Máximo 200 caracteres."
+
+        if self.description and len(self.description) > 500:
+            errors['description'] = "Máximo 500 caracteres."
+
+        if self.end_date and self.end_date < self.start_date:
+            errors['end_date'] = "La fecha de finalización no puede ser anterior a la fecha de inicio."
+
+        if errors:
+            raise ValidationError(errors)

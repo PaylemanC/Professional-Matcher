@@ -68,6 +68,7 @@ class CareerItemCreateView(CareerItemBaseView, FormView):
         career_item = form.save(commit=False)
         career_item.fk_profile = self.request.user.profile
         career_item.item_type = self.item_type
+        career_item.full_clean()
         career_item.save()
         return redirect('profile')
     
@@ -90,7 +91,6 @@ class CareerItemUpdateView(CareerItemBaseView, UpdateView):
         context['item_type'] = self.item_type
         context['mode'] = 'edit'
         return context
-
 
 class CareerItemDeleteView(CareerItemBaseView, DeleteView):
     model = CareerItem
