@@ -5,22 +5,22 @@
 
 {% if match_results %}
 <div id="match-report">
-        <!-- Puntuación General -->
-        <div id="overall-score">
-            <div class="overall-score__circle-progress" style="--value: {{ match_results.overall_score }};">
-                <div class="circle-progress__inner">
-                    <p class="overall-score__value">{{ match_results.overall_score }}%</p>
-                </div>
+    <!-- Puntuación General -->
+    <div id="overall-score">
+        <div class="overall-score__circle-progress" style="--value: {{ match_results.overall_score }};">
+            <div class="circle-progress__inner">
+                <p class="overall-score__value">{{ match_results.overall_score }}%</p>
             </div>
-            {% if match_results.overall_score >= 70 %}
-                <p class="overall-score__message">¡Excelente compatibilidad!</p>
-            {% elif match_results.overall_score >= 50 %}
-                <p class="overall-score__message">Buena compatibilidad, pero hay áreas de mejora.</p>
-            {% else %}
-                <p class="overall-score__message">Hay oportunidades para mejorar tu perfil.</p>
-            {% endif %}
         </div>
-    
+        {% if match_results.overall_score >= 70 %}
+            <p class="overall-score__message">¡Excelente compatibilidad!</p>
+        {% elif match_results.overall_score >= 50 %}
+            <p class="overall-score__message">Buena compatibilidad, pero hay áreas de mejora.</p>
+        {% else %}
+            <p class="overall-score__message">Hay oportunidades para mejorar tu perfil.</p>
+        {% endif %}
+    </div>
+
     <!-- Tecnologías -->
     <div id="technologies" class="report-section">
         {% if match_results.technology_match.matched_technologies %}
@@ -61,9 +61,7 @@
     </div>
 
     <!-- Palabras Clave -->
-    <div>
-        <h3>Palabras Clave y Habilidades ({{ match_results.keyword_match.match_score|floatformat:1 }}%)</h3>
-        
+    <div>        
         <!-- Verbos de Acción -->
         {% if match_results.keyword_match.matched_keywords.action_verbs.items %}
             <p>✅ {{ match_results.keyword_match.matched_keywords.action_verbs.description }}:</p>
@@ -154,5 +152,4 @@
             </ul>
         {% endif %}
     </div>
-</div>
 {% endif %}
