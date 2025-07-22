@@ -22,8 +22,8 @@ class ProfessionalProfile(models.Model):
             errors['area'] = "*Campo obligatorio."
         elif len(self.area) > 100:
             errors['area'] = "*Máximo 100 caracteres."
-        if self.bio and len(self.bio) > 500:
-            errors['bio'] = "*Máximo 500 caracteres."
+        if self.bio and len(self.bio) > 750:
+            errors['bio'] = "*Máximo 750 caracteres."
 
         if errors:
             raise ValidationError(errors)
@@ -63,8 +63,8 @@ class CareerItem(models.Model):
         if self.institution and len(self.institution) > 200:
             errors['institution'] = "Máximo 200 caracteres."
 
-        if self.description and len(self.description) > 500:
-            errors['description'] = "Máximo 500 caracteres."
+        if self.description and len(self.description) > 1100:
+            errors['description'] = "Máximo 1100 caracteres."
 
         if self.end_date and self.end_date < self.start_date:
             errors['end_date'] = "La fecha de finalización no puede ser anterior a la fecha de inicio."
