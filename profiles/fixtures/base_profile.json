@@ -1,0 +1,37 @@
+[
+{
+  "model": "profiles.professionalprofile",
+  "pk": 1,
+  "fields": {
+    "fk_user": 1,
+    "bio": "",
+    "area": "Desarrollador Backend Django",
+    "created_at": "2025-07-22T17:24:59.966Z",
+    "updated_at": "2025-07-22T17:24:59.966Z",
+    "technologies": [
+      4,
+      3
+    ]
+  }
+},
+{
+  "model": "profiles.professionalprofile",
+  "pk": 2,
+  "fields": {
+    "fk_user": 3,
+    "bio": "Con más de 5 años de experiencia lideré proyectos tecnológicos en entornos de alta demanda EDTech y FinTech, impulsando la creación de aplicaciones escalables y seguras. Mi enfoque combina una sólida arquitectura backend con interfaces intuitivas y eficientes, que me permite entregar soluciones completas y bien integradas. Apasionado por la mejora continua, el trabajo en equipo y las buenas prácticas de desarrollo. Actualmente contribuyendo también en procesos de automatización y despliegue en la nube.",
+    "area": "Senior Full Stack Developer",
+    "created_at": "2025-07-22T17:36:23.428Z",
+    "updated_at": "2025-07-22T17:37:55.702Z",
+    "technologies": [
+      32,
+      4,
+      5,
+      3,
+      7,
+      30,
+      16
+    ]
+  }
+}
+]
