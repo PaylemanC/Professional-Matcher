@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-from .local import *
-
 from pathlib import Path
 import os
 
@@ -24,12 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4ak2q-_)8fa4s32(73@l&4^78f^kba7g2g=t!5c-up@gpt=_o9'
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
-
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -113,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
