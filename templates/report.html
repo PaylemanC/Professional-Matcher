@@ -21,6 +21,105 @@
         {% endif %}
     </div>
 
+    <!-- Sugerencias de Mejora -->
+    <div id="improvement">
+        <h2 class="improvement__title">Oportunidades de mejora</h2>
+        <div class="improvement--container">
+            <!-- Action Verbs -->
+            {% if match_results.keyword_match.missing_keywords.action_verbs.items %}
+                <div class="improvement-card">
+                    <p class="report-title">
+                        <span>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#ff9500"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <path d="M6 21l15 -15l-3 -3l-15 15l3 3" />
+                            <path d="M15 6l3 3" />
+                            <path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" />
+                            <path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" />
+                            </svg>
+                        </span>
+                        {{ match_results.keyword_match.missing_keywords.action_verbs.description }}:</p>
+                    <ul>
+                        {% for verb in match_results.keyword_match.missing_keywords.action_verbs.items|slice:":5" %}
+                            <li>{{ verb }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Soft Skills -->
+            {% if match_results.keyword_match.missing_keywords.soft_skills.items %}
+                <div class="improvement-card">
+                    <p class="report-title">
+                        <span>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#ff9500"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                            <path d="M12 6l-3.293 3.293a1 1 0 0 0 0 1.414l.543 .543c.69 .69 1.81 .69 2.5 0l1 -1a3.182 3.182 0 0 1 4.5 0l2.25 2.25" />
+                            <path d="M12.5 15.5l2 2" />
+                            <path d="M15 13l2 2" />
+                            </svg>
+                        </span>
+                        {{ match_results.keyword_match.missing_keywords.soft_skills.description }}:</p>
+                    <ul>
+                        {% for skill in match_results.keyword_match.missing_keywords.soft_skills.items|slice:":5" %}
+                            <li>{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <!-- Phrases -->
+            {% if match_results.keyword_match.missing_keywords.phrases.items %}
+                <div class="improvement-card">
+                    <p class="report-title"> 
+                        <span>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#ff9500"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <path d="M17.5 10.5l1 -1a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4h4l2 -2" />
+                            <path d="M13.5 6.5l4 4" />
+                            <path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" />
+                            </svg>
+                        </span>
+                        {{ match_results.keyword_match.missing_keywords.phrases.description }}
+                    </p>
+                    <ul>
+                        {% for phrase in match_results.keyword_match.missing_keywords.phrases.items|slice:":5" %}
+                            <li>{{ phrase }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- Tecnologías -->
     <div id="technologies" class="report-section">
         {% if match_results.technology_match.matched_technologies %}
@@ -162,37 +261,6 @@
             </div>
         {% else %}
             <p>No se encontraron experiencias laborales relevantes. Considera agregar más experiencias laborales a tu perfil.</p>
-        {% endif %}
-    </div>
-
-    <!-- Sugerencias de Mejora -->
-    <div>
-        <h3>Sugerencias de Mejora</h3>        
-        {% if match_results.keyword_match.missing_keywords.action_verbs.items %}
-            <p>📝 {{ match_results.keyword_match.missing_keywords.action_verbs.description }}:</p>
-            <ul>
-                {% for verb in match_results.keyword_match.missing_keywords.action_verbs.items|slice:":5" %}
-                    <li>{{ verb }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if match_results.keyword_match.missing_keywords.soft_skills.items %}
-            <p>🤝 {{ match_results.keyword_match.missing_keywords.soft_skills.description }}:</p>
-            <ul>
-                {% for skill in match_results.keyword_match.missing_keywords.soft_skills.items|slice:":5" %}
-                    <li>{{ skill }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if match_results.keyword_match.missing_keywords.phrases.items %}
-            <p>🔧 {{ match_results.keyword_match.missing_keywords.phrases.description }}:</p>
-            <ul>
-                {% for phrase in match_results.keyword_match.missing_keywords.phrases.items|slice:":5" %}
-                    <li>{{ phrase }}</li>
-                {% endfor %}
-            </ul>
         {% endif %}
     </div>
 {% endif %}

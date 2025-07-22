@@ -1,6 +1,7 @@
 :root {
     --matched: #1c8f1f;
     --mismatched: #cb2727;
+    --improvement: #ff9500;
 }
 
 /* ------------------- GENERIC ------------------- */
@@ -10,6 +11,7 @@
     align-items: center;
     gap: 16px;
     padding: 16px;
+    border-top: 4px solid var(--secondary-color);
 }
 
 .report-section {
@@ -27,6 +29,11 @@
     max-width: 320px;
 }
 
+.improvement-card {
+    padding: 16px;
+    max-width: 320px;
+}
+
 .report-card.matched {
     border: 1px solid var(--matched);
 }
@@ -40,13 +47,14 @@
     display: flex;
     align-items: center;
     margin-bottom: 8px;
+    text-align: center;
 }
 
 .report-title span {
     margin-right: 4px;
 }
 
-.report-card ul {
+.report-card ul, .improvement-card ul {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,6 +106,22 @@
     font-style: italic;
     text-align: center;
     margin-top: 10px;
+}
+
+/* ------------------- IMPROVEMENT AREAS ------------------- */
+.improvement__title {
+    font-size: 2rem;
+    text-align: center;
+    color: #d97f00;
+}
+
+.improvement--container {
+    display: flex;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--improvement);
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* ------------------- CAREER EXPERIENCE ------------------- */
