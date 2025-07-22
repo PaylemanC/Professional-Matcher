@@ -27,10 +27,10 @@
         <div class="form__input--container">
             {{ form.technologies.label_tag }}
             {{ form.technologies }}
-            {{ form.technologies.errors }}
         </div>
         <div class="form__button--container">
             <button type="submit" class="form-button secondary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Editar perfil{% endif %}</span></button>
+            <a href="{% url 'profile' %}">Cancelar</a>
         </div>
     </form>
 </section>
