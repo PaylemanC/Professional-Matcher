@@ -533,13 +533,6 @@
 },
 {
   "model": "technologies.technology",
-  "pk": 79,
-  "fields": {
-    "name": "ada"
-  }
-},
-{
-  "model": "technologies.technology",
   "pk": 80,
   "fields": {
     "name": "ajax"
