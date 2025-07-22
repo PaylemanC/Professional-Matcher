@@ -14,6 +14,7 @@
 
 .report-section {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;    
     gap: 16px;
 }
@@ -23,6 +24,7 @@
     border-radius: 4px;
     background: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 320px;
 }
 
 .report-card.matched {
@@ -42,6 +44,14 @@
 
 .report-title span {
     margin-right: 4px;
+}
+
+.report-card ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
 }
 
 /* ------------------- OVERALL SCORE ------------------- */
@@ -88,14 +98,4 @@
     font-style: italic;
     text-align: center;
     margin-top: 10px;
-}
-
-/* ------------------- TECHNOLOGIES ------------------- */
-
-.technologies__list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    font-weight: bold;
 }
