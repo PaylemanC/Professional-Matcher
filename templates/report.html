@@ -140,14 +140,13 @@
 
     <!-- Experiencia Relevante -->
     <div class="career-experience">
-        <h3>Experiencia Laboral Más Relevante</h3>
+        <p class="career-experience__label">Experiencia Laboral Más Relevante</p>
         {% if match_results.career_items.details %}
-            <div>
+            <div class="career-experience__cards--container">
                 {% for item in match_results.career_items.details|slice:":3" %}
-                    <div>
-                        <h4>{{ item.title }} - {{ item.institution }}</h4>
-                        <p><strong>Relevancia:</strong> {{ item.relevance_score|floatformat:2 }} ({{ item.relevance_score|floatformat:0 }}%)</p>
-                        <p><strong>Periodo:</strong> 
+                    <div class="career-experience__card">
+                        <p class="career-experience__title">{{ item.title }} - {{ item.institution }}</p>
+                        <p class="career-experience__dates">
                             {{ item.start_date|date:"M Y" }}
                             {% if item.end_date %}
                                 - {{ item.end_date|date:"M Y" }}
@@ -156,9 +155,8 @@
                             {% endif %}
                         </p>
                         {% if item.description %}
-                            <p><strong>Descripción:</strong> {{ item.description|truncatewords:25 }}</p>
+                            <p class="career-experience__description">{{ item.description|truncatewords:25 }}</p>
                         {% endif %}
-                        <hr>
                     </div>
                 {% endfor %}
             </div>

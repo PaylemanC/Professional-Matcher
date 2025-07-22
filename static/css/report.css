@@ -99,3 +99,41 @@
     text-align: center;
     margin-top: 10px;
 }
+
+/* ------------------- CAREER EXPERIENCE ------------------- */
+.career-experience {
+    max-width: 992px;
+    padding: 32px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.career-experience__label {
+    color: var(--matched);
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.7rem;
+}
+
+.career-experience__cards--container, .career-experience__card {
+    display: flex;
+    flex-direction: column;
+}
+
+.career-experience__cards--container {
+    gap: 16px;
+}
+
+.career-experience__card {
+    gap: 4px;
+}
+
+.career-experience__title {
+    font-weight: bold;
+}
+
+.career-experience__dates {
+    color: var(--soft-text-color);
+    font-style: italic;
+}
