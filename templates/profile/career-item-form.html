@@ -34,9 +34,11 @@
                 {{ form.end_date }}
                 {{ form.end_date.errors }}
             </div>
-            <div class="form__button--container">
-                <button type="submit" class="form-button primary-button"><span>{% if mode == "create" %}Añadir{% else %}Guardar{% endif %}</span></button>
-                <a href="{% url 'profile' %}">Cancelar</a>
+            <div class="form__options">
+                <div class="form__button--container">
+                    <button type="submit" class="form-button primary-button"><span>{% if mode == "create" %}Añadir{% else %}Guardar{% endif %}</span></button>
+                </div>
+                <a href="{% url 'profile' %}" class="cancel-btn">Cancelar</a>
             </div>
         </form>
     </section>

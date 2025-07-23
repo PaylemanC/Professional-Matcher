@@ -10,6 +10,7 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-bottom: 8px;
 }
 
 .profile-crud-url {
@@ -59,6 +60,7 @@ p {
 }
 
 .profile__technology {
+    text-align: center;
     font-weight: bold;
 }
 
@@ -115,4 +117,19 @@ p {
 .profile__empty-message {
     font-style: italic;
     color: var(--soft-text-color);
+}
+
+.form__options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.cancel-btn {
+    color: var(--soft-text-color);
+    border-bottom: 2px solid var(--soft-text-color);
+    padding-bottom: 4px;
+    background-color: var(--background-color);
+    text-decoration: none;
 }

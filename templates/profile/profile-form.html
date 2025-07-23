@@ -23,9 +23,11 @@
             {{ form.technologies.label_tag }}
             {{ form.technologies }}
         </div>
-        <div class="form__button--container">
-            <button type="submit" class="form-button primary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Guardar{% endif %}</span></button>
-            <a href="{% url 'profile' %}">Cancelar</a>
+        <div class="form__options">
+            <div class="form__button--container">
+                <button type="submit" class="form-button primary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Guardar{% endif %}</span></button>
+            </div>
+            <a href="{% url 'profile' %}" class="cancel-btn">Cancelar</a>
         </div>
     </form>
 </section>
