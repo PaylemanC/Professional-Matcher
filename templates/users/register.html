@@ -6,14 +6,18 @@
 {% block content %}
     <section class="authentication">
         <div class="authentication-form--container">
-            <div>
+            <div class="authentication-form--content">
                 <h2 class="authentication-form__title">Regístrate</h2>
                 <form method="post" class="authentication-form">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit">Registrarse</button>
+                    <div class="form__button--container">
+                        <button type="submit" class="form-button primary-button">
+                            <span>Registrarse</span>
+                        </button>
+                    </div>
                 </form>
-                <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+                <p class="form__link">¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
             </div>
         </div>
     </section>

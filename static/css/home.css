@@ -73,3 +73,18 @@
     font-style: italic;
     color: var(--soft-text-color);
 }
+
+.main-section__form-button {
+  background-image: linear-gradient(144deg, var(--soft-primary-color),  var(--primary-color) 50%, var(--soft-primary-color));
+  border-radius: 8px;
+  font-size: 1.8rem;
+  color: white;
+  outline: 0;
+  border: none;
+  padding: 12px 24px;
+  transition: background-color 300ms, transform 300ms;
+}
+
+.main-section__form-button:hover, .main-section__form-button:active {
+  transform: scale(0.98);
+}

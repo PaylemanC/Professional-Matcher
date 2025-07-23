@@ -16,8 +16,8 @@
         {% endif %}
     </div>
     <div class="career-item__actions">
-        <a href="{% url 'career_item_edit' item.item_type item.pk %}">Editar</a>
-        <button type="button" onclick="openDeletePopup('{{ item.pk }}', '{{ item.title|escapejs }}', '{{ item.item_type }}')">Eliminar</button>
+        <a href="{% url 'career_item_edit' item.item_type item.pk %}" class="form-button action-button">Editar</a>
+        <button type="button" onclick="openDeletePopup('{{ item.pk }}', '{{ item.title|escapejs }}', '{{ item.item_type }}')" class="form-button action-button delete-btn">Eliminar</button>
     </div>
 </div>
 {% endif %}
