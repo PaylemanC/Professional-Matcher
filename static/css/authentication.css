@@ -51,3 +51,14 @@
     outline: none;
     border-bottom: 2px solid var(--primary-color);
 }
+
+.form__link {
+    text-align: center;
+    font-style: italic;
+}
+
+.form__link a {
+    color: var(--soft-primary-color);
+    font-weight: bold;
+    font-style: normal;
+}
