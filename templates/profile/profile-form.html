@@ -5,11 +5,6 @@
 {% endblock styles %}
 
 {% block content %}
-{% if mode == "create" %}
-    <a href="{% url 'home' %}">Regresar</a>
-{% else %}
-    <a href="{% url 'profile' %}">Regresar</a>
-{% endif %}
 <section id="form-section" class="profile-form-section">
     <h2>{% if mode == "create" %}Crea tu perfil profesional{% else %}Mi perfil profesional{% endif %}</h2>
     <form method="post" class="profile-form">
@@ -29,7 +24,7 @@
             {{ form.technologies }}
         </div>
         <div class="form__button--container">
-            <button type="submit" class="form-button secondary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Editar perfil{% endif %}</span></button>
+            <button type="submit" class="form-button secondary-button"><span>{% if mode == "create" %}Crear perfil{% else %}Guardar{% endif %}</span></button>
             <a href="{% url 'profile' %}">Cancelar</a>
         </div>
     </form>
