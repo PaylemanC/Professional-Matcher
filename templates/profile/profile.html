@@ -8,21 +8,46 @@
 {% block content %}
 <div class="profile">
     <section class="user__data">
-        <p>{{ user.username }} - {{user.email}}</p> 
+        <div>
+            <p>{{ user.username }} - {{user.email}}</p> 
+            <h2>{% if profile.area %} {{ profile.area }} {% else %} Tu Perfil Profesional {% endif %}</h2>
+            {% if profile %}        
+                <p>Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
+            {% endif %}
+            {% if not profile.area or not profile.bio or not profile.technologies.exists or not profile.career_items.exists %}
+                <p class="profile__empty-message">¡Recuerda que mientras más completo tengas tu perfil, mejor serán los resultados!</p>
+            {% endif %}
+        </div>
+        {% if profile %}
+            <a href="{% url 'profile_update' %}" class="profile-crud-url">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#31398e"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                >
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+                </svg>
+                Editar perfil profesional                
+            </a> 
+        {% endif %}
     </section>
     <section class="user__profile">
-        <h2>{% if profile.area %} {{ profile.area }} {% else %} Tu Perfil Profesional {% endif %}</h2>
         {% if profile %}
         <div class="profile__data--container">
-            <p class="profile__last-update">Última actualización: {{ profile.updated_at|date:"d/m/Y" }}</p>
-            <a href="{% url 'profile_update' %}" class="profile__edit">Editar perfil profesional</a>  
             <div class="profile__data">
                 <div class="profile__bio--container profile__container">
                     <p class="profile__label">Biografía</p>
                     {% if profile.bio %}
                         <p>{{ profile.bio }}</p>
                     {% else %}
-                        <p>No tienes una biografía todavía.</p>
+                        <p class="profile__empty-message">No tienes una biografía todavía.</p>
                     {% endif %}
                 </div>  
                 <div class="profile__technologies--container profile__container">
@@ -35,29 +60,69 @@
                             {% endfor %}
                         </p>
                     {% else %}
-                        <p>No tienes ninguna tecnología todavía.</p>
+                        <p class="profile__empty-message">No tienes ninguna tecnología todavía.</p>
                     {% endif %}
                 </div>
                 <div class="profile__career-items--container profile__container">
-                    <p class="profile__label">Experiencia</p>
-                    <a href="{% url 'career_item_create' 'experience' %}">Añadir experiencia laboral</a>
+                    <div class="profile__label--container">
+                        <p class="profile__label">Experiencia</p>
+                        <a href="{% url 'career_item_create' 'experience' %}" class="profile-crud-url">
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#31398e"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                            <path d="M13.5 6.5l4 4" />
+                            </svg>
+                            Añadir experiencia laboral
+                        </a>
+                    </div>
                     {% if profile.career_items.exists %}
                         <div class="profile__career-items--list">
                         {% for item in profile.career_items.all %}
                             {% include "components/career-item.html" with item=item type='experience' %}
                         {% endfor %}
                         </div>
+                    {% else %}
+                        <p class="profile__empty-message">Aún no has añadido experiencia laboral.</p>
                     {% endif %}
                 </div>
                 <div class="profile__career-items--container profile__container">
-                    <p class="profile__label">Educación</p>
-                    <a href="{% url 'career_item_create' 'education' %}">Añadir educación</a>
+                    <div class="profile__label--container">
+                        <p class="profile__label">Educación</p>
+                        <a href="{% url 'career_item_create' 'education' %}" class="profile-crud-url">
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#31398e"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                            <path d="M13.5 6.5l4 4" />
+                            </svg>
+                            Añadir educación
+                        </a>
+                    </div>
                     {% if profile.career_items.exists %}
                         <div class="profile__career-items--list">     
                         {% for item in profile.career_items.all %}
                             {% include "components/career-item.html" with item=item type='education' %}
                         {% endfor %}
                         </div>
+                    {% else %}
+                        <p class="profile__empty-message">Aún no has añadido sobre tu educación.</p>
                     {% endif %}
                 </div>
             </div>
@@ -65,7 +130,7 @@
         {% else %}
         <div class="profile__empty">
             <p>Aún no has cargado tu perfil profesional.</p>
-            <a href="{% url 'profile_create' %}">Crea tu perfil profesional</a>
+            <a href="{% url 'profile_create' %}" class="profile-crud-url">Crea tu perfil profesional</a>
         </div>
         {% endif %}
     </section>
