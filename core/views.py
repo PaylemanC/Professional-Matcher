@@ -45,8 +45,6 @@ def home(request):
                     'job_offer': job_text
                 }
                 
-                messages.success(request, f'Análisis completado. Puntuación de compatibilidad: {overall_score}%')
-                
             except Exception as e:
                 messages.error(request, f'Error al procesar la oferta laboral: {str(e)}')
                 match_results = None
