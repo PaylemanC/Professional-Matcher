@@ -346,7 +346,7 @@
   "model": "technologies.technology",
   "pk": 52,
   "fields": {
-    "name": "go"
+    "name": "golang"
   }
 },
 {
@@ -711,6 +711,13 @@
   "pk": 108,
   "fields": {
     "name": "jenkins"
+  }
+},
+{
+  "model": "technologies.technology",
+  "pk": 109,
+  "fields": {
+    "name": "postman"
   }
 }
 ]

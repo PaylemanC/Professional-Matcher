@@ -8,7 +8,7 @@
     "title": "Desarrollador Web",
     "description": "Formé parte del equipo encargado del desarrollo y mantenimiento de una plataforma web orientada al sector EdTech, trabajando en conjunto con áreas de producto y diseños. Lideré la implementación de nuevas funcionalidades end-to-end, desde el diseño de la arquitectura hasta el despliegue en producción, garantizando altos estándares de rendimiento, seguridad y usabilidad.\r\n\r\nDesarrollo y mantenimiento de microservicios y APIs RESTful para el core del sistema.\r\nIntegración de servicios externos como pasarelas de pago, autenticación y analítica.\r\nOptimización de rendimiento y tiempos de carga en la interfaz del usuario.\r\nParticipación activa en revisiones de código y definición de estándares técnicos.",
     "institution": "Código Facilito",
-    "start_date": "2024-01-01",
+    "start_date": "2023-01-01",
     "end_date": null
   }
 },
@@ -21,8 +21,21 @@
     "title": "Ingeniería en Sistemas",
     "description": "",
     "institution": "Universidad Nacional de Buenos Aires",
-    "start_date": "2017-03-01",
+    "start_date": "2015-03-01",
     "end_date": "2021-11-01"
+  }
+},
+{
+  "model": "profiles.careeritem",
+  "pk": 3,
+  "fields": {
+    "fk_profile": 2,
+    "item_type": "experience",
+    "title": "QA Tester",
+    "description": "Procesos de testing manual y automatizado en entornos ágiles. Especializado en garantizar entregas estables, eficientes y libres de errores críticos, diseñando estrategias de prueba alineadas a los objetivos del negocio. Amplio conocimiento en pruebas funcionales, regresión, integración y performance.",
+    "institution": "Cody INC.",
+    "start_date": "2021-06-01",
+    "end_date": "2023-12-01"
   }
 }
 ]

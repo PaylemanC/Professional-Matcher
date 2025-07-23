@@ -149,4 +149,5 @@ RELEVANT_PHRASE_PATTERNS = [
     r'singleton|factory|observer|strategy|command|adapter|proxy|decorator\s',
     r'frontend|backend|full\s*stack|fullstack|fullstack',
     r'qa|quality\s*assurance|quality\s*control',
+    r'(edtech|fintech|healthtech|legaltech|agrotech|biotech|paytech|insuretech|adtech|gamingtech|iot|blockchain|crypto)'
 ]
