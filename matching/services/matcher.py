@@ -71,7 +71,7 @@ class MatcherService:
         
         similarity_matrix = cosine_similarity(user_embeddings, job_embeddings)
         
-        threshold = 0.65  # Reducido para permitir más matches válidos
+        threshold = 0.60  # Punto medio entre muy permisivo y muy estricto
         match_details = []        
         matched_technologies = []
         matched_job_technologies = []         
@@ -307,40 +307,65 @@ class MatcherService:
 
     def score_match(self):
         ''' Returns a score based on the match between user profile and job offer '''
-        TECH = 0.40     
+        TECH = 0.35     
         KEYWORDS = 0.35  
-        CAREER = 0.25   
+        CAREER = 0.20  
+        BASE_SCORE = 0.10
         
         tech_results = getattr(self, 'technology_match_results', {})
         tech_matched = len(tech_results.get('matched_technologies', []))
         tech_missing = len(tech_results.get('missing_technologies', []))
         tech_user_total = len([tech.name for tech in self.profile.technologies.all()])
         
-        if tech_user_total > 0 and (tech_matched + tech_missing) > 0:
-            coverage_score = (tech_matched / (tech_matched + tech_missing)) * 100 
-            user_score = (tech_matched / tech_user_total) * 100  
-            tech_score = (coverage_score * 0.7 + user_score * 0.3)  
+        if tech_user_total > 0:
+            if (tech_matched + tech_missing) > 0:
+                coverage_score = (tech_matched / (tech_matched + tech_missing)) * 100
+                relevance_score = min(100, (tech_matched / max(1, tech_user_total)) * 110) 
+                tech_score = (coverage_score * 0.7 + relevance_score * 0.3) 
+            else:
+                tech_score = 35.0  
         else:
             tech_score = 0.0
         
-        keywords_score = getattr(self, 'keyword_match_results', {}).get('match_score', 0.0)
+        raw_keywords_score = getattr(self, 'keyword_match_results', {}).get('match_score', 0.0)
+        keywords_score = raw_keywords_score
         
         career_results = getattr(self, 'career_items_results', {})
         career_scores = career_results.get('relevance_scores', [])
         if career_scores:
             top_career_scores = sorted(career_scores, reverse=True)[:3]
-            boosted_scores = [min(100, (score * 100) + 15) for score in top_career_scores]
+            boosted_scores = [min(100, (score * 110) + 15) for score in top_career_scores]
             career_score = sum(boosted_scores) / len(boosted_scores)
         else:
-            career_score = 20.0
+            career_score = 15.0
+        
+        base_score = 0
+        if tech_user_total > 0:
+            base_score += 20 
+        if hasattr(self.profile, 'bio') and self.profile.bio:
+            base_score += 25 
+        if career_scores:
+            base_score += 25
         
         final_score = (
             tech_score * TECH +
             keywords_score * KEYWORDS +
-            career_score * CAREER 
+            career_score * CAREER +
+            base_score * BASE_SCORE
         )
+        
+        # Penalización por keywords faltantes
+        if keywords_score < 50: 
+            penalty = (50 - keywords_score) * 0.5  # progresiva
+            final_score -= penalty
+        
+        if tech_matched > 0:
+            final_score += min(8, tech_matched * 1.5)
+        
         final_score = max(0.0, min(100.0, final_score))
-
+        if final_score > 0:
+            final_score = max(final_score, 25.0)
+        
         return round(final_score)
 
     def match(self):
