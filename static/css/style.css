@@ -108,6 +108,12 @@ footer {
   gap: 32px;
   position: relative;
   z-index: 50;
+  border-top: 4px solid var(--secondary-color);
+}
+
+.footer__list .footer__project-use {
+  font-style: italic;
+  margin-bottom: 8px;
 }
 
 .footer__list:not(.developer) {
@@ -115,6 +121,24 @@ footer {
 }
 
 .footer__developer-name {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 1.7rem;
+}
+
+.footer__item {
+  display: flex;
+  align-items: flex-start;
+  color: var(--primary-color);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.footer__item a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--primary-color);
+  padding-bottom: 5px;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
